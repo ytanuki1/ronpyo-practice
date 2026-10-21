@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英文法・分詞克服アプリ Let's Practice!</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif, system-ui;
+    }
+    .red-pen-note {
+      color: #dc2626;
+      font-weight: 600;
+      background-color: #fef2f2;
+      border-left: 4px solid #ef4444;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header Section -->
+  <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('mode-screen')">
+        <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-graduation-cap text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-white">分詞マスター</h1>
+          <p class="text-xs text-slate-400">英文法プリント徹底復習アプリ</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="openStatsModal()" class="px-3 py-1.5 text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all flex items-center gap-1.5 border border-slate-600">
+          <i class="fa-solid fa-chart-pie text-indigo-400"></i>
+          <span>苦手分析</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow flex items-center justify-center">
+
+    <!-- 1. Mode Selection Screen -->
+    <div id="mode-screen" class="w-full space-y-6">
+      <div class="text-center space-y-2">
+        <span class="inline-block px-3 py-1 text-xs font-semibold bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">Let's Practice!</span>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">学習モードを選択</h2>
+        <p class="text-slate-400 text-sm">自分のペースで繰り返し学習し、弱点を克服しましょう</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+        <!-- All Questions Mode -->
+        <div onclick="startQuiz('all')" class="group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-indigo-500/50 p-6 rounded-2xl transition-all cursor-pointer shadow-xl hover:shadow-indigo-500/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-layer-group text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">全20問テストモード</h3>
+            <p class="text-slate-400 text-xs leading-relaxed">問題と選択肢順序が毎回ランダムにシャッフルされます。実力チェックに最適です。</p>
+          </div>
+          <div class="mt-6 flex items-center text-xs font-semibold text-indigo-400 group-hover:text-indigo-300">
+            スタート <i class="fa-solid fa-arrow-right ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </div>
+
+        <!-- Weakness Mode -->
+        <div onclick="startQuiz('weak')" class="group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-red-500/50 p-6 rounded-2xl transition-all cursor-pointer shadow-xl hover:shadow-red-500/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">苦手・誤答克服モード</h3>
+            <p class="text-slate-400 text-xs leading-relaxed">過去に間違えた回数が多い問題を優先的に抽出して解き直します。</p>
+          </div>
+          <div class="mt-6 flex items-center text-xs font-semibold text-red-400 group-hover:text-red-300">
+            克服スタート <i class="fa-solid fa-arrow-right ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Card -->
+      <div id="home-stats-card" class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-fire text-amber-500 text-lg"></i>
+          <div>
+            <p class="text-xs text-slate-400">総解答回数</p>
+            <p id="total-attempts-count" class="text-lg font-bold text-slate-100">0 回</p>
+          </div>
+        </div>
+        <button onclick="openStatsModal()" class="text-xs text-indigo-400 hover:underline flex items-center gap-1">
+          データ詳細 <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Quiz Screen -->
+    <div id="quiz-screen" class="w-full hidden space-y-6">
+      <!-- Quiz Progress Bar Header -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
+          <span id="quiz-progress-text">問題 1 / 20</span>
+          <span id="quiz-score-text">正解数: 0</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+          <div id="quiz-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-6">
+        <div class="flex justify-between items-start gap-2">
+          <span id="question-id-badge" class="px-2.5 py-1 text-xs font-bold bg-slate-700 text-slate-300 rounded-lg">#Q1</span>
+          <span id="question-mode-badge" class="px-2.5 py-1 text-xs font-medium bg-indigo-500/10 text-indigo-400 rounded-lg border border-indigo-500/20">通常</span>
+        </div>
+
+        <div class="text-xl md:text-2xl font-bold text-white leading-relaxed tracking-wide" id="question-sentence">
+          <!-- Problem text will be inserted here -->
+        </div>
+
+        <!-- Options Container -->
+        <div id="options-container" class="grid grid-cols-1 gap-3 pt-2">
+          <!-- Dynamic Buttons -->
+        </div>
+
+        <!-- Feedback & Explanation Box (Initially Hidden) -->
+        <div id="explanation-box" class="hidden rounded-xl p-5 border space-y-3 transition-all">
+          <div class="flex items-center space-x-2 font-bold text-lg" id="feedback-title">
+            <!-- Icon & Correct/Incorrect text -->
+          </div>
+          
+          <div class="red-pen-note p-3.5 rounded-lg text-sm space-y-1">
+            <div class="flex items-center gap-1.5 text-xs text-red-600 font-bold uppercase tracking-wider">
+              <i class="fa-solid fa-pen-nib"></i> 赤ペン解説
+            </div>
+            <p id="explanation-text" class="text-slate-800 font-bold text-sm leading-relaxed"></p>
+          </div>
+
+          <div class="pt-2 flex justify-end">
+            <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+              次の問題へ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Result Screen -->
+    <div id="result-screen" class="w-full hidden space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-flex p-3 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-indigo-400 mb-2">
+          <i class="fa-solid fa-trophy text-3xl"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold text-white">リザルト</h2>
+        <p class="text-slate-400 text-sm">今回のテスト結果です</p>
+      </div>
+
+      <!-- Result Summary Cards -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">正解数</p>
+          <p id="result-score" class="text-2xl font-bold text-indigo-400 mt-1">0 / 0</p>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">正解率</p>
+          <p id="result-accuracy" class="text-2xl font-bold text-emerald-400 mt-1">0%</p>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">所要時間</p>
+          <p id="result-time" class="text-2xl font-bold text-amber-400 mt-1">0s</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button onclick="startQuiz('all')" class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> もう一度遊ぶ（全20問）
+        </button>
+        <button id="retry-wrong-btn" onclick="retryWrongQuestions()" class="flex-1 py-3 px-4 bg-red-600/80 hover:bg-red-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-red-600/20 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-filter"></i> 間違えた問題だけ解き直す
+        </button>
+      </div>
+
+      <!-- Wrong Questions List -->
+      <div id="wrong-questions-section" class="space-y-3 pt-2">
+        <h3 class="font-bold text-slate-200 text-base flex items-center gap-2">
+          <i class="fa-solid fa-circle-xmark text-red-500"></i> 今回間違えた問題・復習一覧
+        </h3>
+        <div id="wrong-questions-list" class="space-y-3">
+          <!-- Dynamic insert wrong items -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 4. Stats Modal -->
+  <div id="stats-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-700 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-chart-line text-indigo-400 text-xl"></i>
+          <h3 class="font-bold text-lg text-white">問題別 誤答・苦手データ</h3>
+        </div>
+        <button onclick="closeStatsModal()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto flex-grow space-y-4">
+        <p class="text-xs text-slate-400">これまでの解答履歴に基づく誤答回数ランキングです。過去に間違えた問題から集計されています。</p>
+        <div id="stats-list" class="space-y-2">
+          <!-- Dynamic Items -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-700 bg-slate-800/50 flex justify-between items-center rounded-b-2xl">
+        <button onclick="resetStats()" class="px-3 py-1.5 text-xs text-red-400 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-all flex items-center gap-1">
+          <i class="fa-solid fa-trash-can"></i> データ初期化
+        </button>
+        <button onclick="closeStatsModal()" class="px-4 py-1.5 text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-white rounded-lg">
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    <p>英文法プリント (分詞) 無限リピート学習アプリ</p>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    // 1. Raw Question Database
+    const rawQuestions = [
+      {
+        id: 1,
+        sentence: "( Shocking / Shocked ) at the news, we just stood there.",
+        options: ["Shocking", "Shocked"],
+        answer: "Shocked",
+        explanation: "Beingの省略 / 受け身の分詞構文"
+      },
+      {
+        id: 2,
+        sentence: "I keep the window ( closing / closed ) while I'm sleeping.",
+        options: ["closing", "closed"],
+        answer: "closed",
+        explanation: "窓は「閉められる」から過去分詞"
+      },
+      {
+        id: 3,
+        sentence: "My sister is looking for his ( stealing / stolen ) bike.",
+        options: ["stealing", "stolen"],
+        answer: "stolen",
+        explanation: "盗まれた自転車"
+      },
+      {
+        id: 4,
+        sentence: "Fred had a bad tooth ( pull / pulled ) out.",
+        options: ["pull", "pulled"],
+        answer: "pulled",
+        explanation: "使役動詞 + O + 過去分詞 / 歯は抜かれる"
+      },
+      {
+        id: 5,
+        sentence: "I feel my heart ( beating / beaten ) wildly.",
+        options: ["beating", "beaten"],
+        answer: "beating",
+        explanation: "知覚動詞 + O + 現在分詞 / heartは自分で動くので現在分詞"
+      },
+      {
+        id: 6,
+        sentence: "He could make himself ( hearing / heard ) in the crowd.",
+        options: ["hearing", "heard"],
+        answer: "heard",
+        explanation: "make + oneself + heard: 自分の声を届かせる ※make oneself understoodも出す"
+      },
+      {
+        id: 7,
+        sentence: "We saw him ( injuring / injure / injured ) on the stage.",
+        options: ["injuring", "injure", "injured"],
+        answer: "injured",
+        explanation: "知覚 + O + 過去分詞 / be injuredで「ケガする」なので過去分詞"
+      },
+      {
+        id: 8,
+        sentence: "Don't leave the water ( run / running ).",
+        options: ["run", "running"],
+        answer: "running",
+        explanation: "leave + O + C(〜ing)"
+      },
+      {
+        id: 9,
+        sentence: "I heard my name ( calling / called ) in the crowd.",
+        options: ["calling", "called"],
+        answer: "called",
+        explanation: "知覚 + O + 過去分詞 / 名前は呼ばれる"
+      },
+      {
+        id: 10,
+        sentence: "He sat ( surround / surrounded / surrounding ) by his friends.",
+        options: ["surround", "surrounded", "surrounding"],
+        answer: "surrounded",
+        explanation: "分詞 + 過去分詞 : 〜されて座っている"
+      },
+      {
+        id: 11,
+        sentence: "I had my baggage ( carry / carrying / carried ) upstairs.",
+        options: ["carry", "carrying", "carried"],
+        answer: "carried",
+        explanation: "使役 + O + 過去分詞"
+      },
+      {
+        id: 12,
+        sentence: "( Seeing / Seen ) from a distance, the rock looked like a face.",
+        options: ["Seeing", "Seen"],
+        answer: "Seen",
+        explanation: "Beingの省略 / 主語(the rock)は「見られる」もの → 受け身の分詞構文"
+      },
+      {
+        id: 13,
+        sentence: "The woman was standing on the hill with her hair ( streaming / streamed ).",
+        options: ["streaming", "streamed"],
+        answer: "streaming",
+        explanation: "付帯状況 with + O + 〜ing / Oを〜しながら"
+      },
+      {
+        id: 14,
+        sentence: "( Having seen / Seeing ) the movie before, I didn't want to see it again.",
+        options: ["Having seen", "Seeing"],
+        answer: "Having seen",
+        explanation: "過去よりも古いことがわかるので、完了の分詞構文"
+      },
+      {
+        id: 15,
+        sentence: "He waited for her to come back with the engine ( run / running / ran ).",
+        options: ["run", "running", "ran"],
+        answer: "running",
+        explanation: "付帯状況 with + O + 〜ing"
+      },
+      {
+        id: 16,
+        sentence: "I heard someone ( calling / called ) her name.",
+        options: ["calling", "called"],
+        answer: "calling",
+        explanation: "知覚 + O + 〜ing / 誰かが名前を呼んでいる"
+      },
+      {
+        id: 17,
+        sentence: "They stood ( talking / talked ) with each other.",
+        options: ["talking", "talked"],
+        answer: "talking",
+        explanation: "stand + 〜ing : 〜して立っている"
+      },
+      {
+        id: 18,
+        sentence: "The boy had his precious bag ( stealing / stolen ).",
+        options: ["stealing", "stolen"],
+        answer: "stolen",
+        explanation: "使役(被害) + O + 過去分詞 : Oが〜される"
+      },
+      {
+        id: 19,
+        sentence: "I felt myself ( lifting / lifted ) up.",
+        options: ["lifting", "lifted"],
+        answer: "lifted",
+        explanation: "知覚 + O + 過去分詞"
+      },
+      {
+        id: 20,
+        sentence: "I saw the book ( advertising / advertised ) in the paper.",
+        options: ["advertising", "advertised"],
+        answer: "advertised",
+        explanation: "知覚 + O + 過去分詞"
+      }
+    ];
+
+    // 2. Application State
+    let quizQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let wrongQuestionsInSession = [];
+    let startTime = null;
+    let stats = {}; // { [qId]: { attempts: 0, wrong: 0 } }
+
+    // 3. LocalStorage Functions
+    function loadStats() {
+      const saved = localStorage.getItem('grammar_quiz_stats');
+      if (saved) {
+        try {
+          stats = JSON.parse(saved);
+        } catch (e) {
+          stats = {};
+        }
+      }
+      // Ensure all IDs exist in stats
+      rawQuestions.forEach(q => {
+        if (!stats[q.id]) {
+          stats[q.id] = { attempts: 0, wrong: 0 };
+        }
+      });
+      updateHomeStats();
+    }
+
+    function saveStats() {
+      localStorage.setItem('grammar_quiz_stats', JSON.stringify(stats));
+      updateHomeStats();
+    }
+
+    function recordAnswer(qId, isCorrect) {
+      if (!stats[qId]) {
+        stats[qId] = { attempts: 0, wrong: 0 };
+      }
+      stats[qId].attempts += 1;
+      if (!isCorrect) {
+        stats[qId].wrong += 1;
+      }
+      saveStats();
+    }
+
+    function resetStats() {
+      if (confirm('すべての解答履歴と誤答データを初期化しますか？')) {
+        stats = {};
+        rawQuestions.forEach(q => {
+          stats[q.id] = { attempts: 0, wrong: 0 };
+        });
+        saveStats();
+        renderStatsModal();
+      }
+    }
+
+    function updateHomeStats() {
+      let totalAttempts = 0;
+      Object.values(stats).forEach(s => {
+        totalAttempts += s.attempts;
+      });
+      const attemptsElem = document.getElementById('total-attempts-count');
+      if (attemptsElem) {
+        attemptsElem.textContent = `${totalAttempts} 回`;
+      }
+    }
+
+    // Utility: Fisher-Yates Shuffle
+    function shuffleArray(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+
+    // 4. UI Screen Navigation
+    function showScreen(screenId) {
+      document.getElementById('mode-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+
+      document.getElementById(screenId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 5. Start Quiz Engine
+    function startQuiz(mode) {
+      loadStats();
+      score = 0;
+      currentQuestionIndex = 0;
+      wrongQuestionsInSession = [];
+      startTime = new Date();
+
+      if (mode === 'all') {
+        // Shuffle all 20 questions
+        quizQuestions = shuffleArray(rawQuestions);
+      } else if (mode === 'weak') {
+        // Pick questions with wrong > 0 or highest error rate
+        let pool = [...rawQuestions].sort((a, b) => {
+          const wrongA = stats[a.id] ? stats[a.id].wrong : 0;
+          const wrongB = stats[b.id] ? stats[b.id].wrong : 0;
+          return wrongB - wrongA;
+        });
+
+        // Filter those with wrong count > 0, if none exist, fallback to all
+        let weakPool = pool.filter(q => stats[q.id] && stats[q.id].wrong > 0);
+        if (weakPool.length < 5) {
+          // If few wrong items, take top 10 from sorted pool
+          weakPool = pool.slice(0, 10);
+        }
+        quizQuestions = shuffleArray(weakPool);
+      }
+
+      showScreen('quiz-screen');
+      renderQuestion();
+    }
+
+    function retryWrongQuestions() {
+      if (wrongQuestionsInSession.length === 0) return;
+      quizQuestions = shuffleArray(wrongQuestionsInSession);
+      score = 0;
+      currentQuestionIndex = 0;
+      wrongQuestionsInSession = [];
+      startTime = new Date();
+
+      showScreen('quiz-screen');
+      renderQuestion();
+    }
+
+    // 6. Render Current Question
+    function renderQuestion() {
+      const q = quizQuestions[currentQuestionIndex];
+
+      // Update progress & headers
+      document.getElementById('quiz-progress-text').textContent = `問題 ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+      document.getElementById('quiz-score-text').textContent = `正解数: ${score}`;
+      
+      const progressPercent = ((currentQuestionIndex) / quizQuestions.length) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+
+      document.getElementById('question-id-badge').textContent = `#Q${q.id}`;
+      document.getElementById('question-sentence').textContent = q.sentence;
+
+      // Hide explanation
+      const expBox = document.getElementById('explanation-box');
+      expBox.classList.add('hidden');
+
+      // Shuffle options for rendering
+      const shuffledOptions = shuffleArray(q.options);
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn w-full text-left p-4 rounded-xl font-semibold border border-slate-700 bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500 transition-all text-slate-100 flex justify-between items-center group';
+        btn.innerHTML = `
+          <span>${escapeHtml(opt)}</span>
+          <i class="fa-solid fa-chevron-right text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all text-sm"></i>
+        `;
+        btn.onclick = () => selectOption(opt, q);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // 7. Select Option & Show Feedback
+    function selectOption(selectedOpt, question) {
+      // Disable all option buttons
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+      });
+
+      const isCorrect = (selectedOpt === question.answer);
+
+      // Record stats
+      recordAnswer(question.id, isCorrect);
+
+      if (isCorrect) {
+        score++;
+      } else {
+        wrongQuestionsInSession.push(question);
+      }
+
+      // Highlight selected button & correct button
+      buttons.forEach(btn => {
+        const text = btn.querySelector('span').textContent;
+        if (text === question.answer) {
+          btn.classList.remove('bg-slate-800/80', 'border-slate-700', 'opacity-60');
+          btn.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-300', 'opacity-100');
+        }
+        if (text === selectedOpt && !isCorrect) {
+          btn.classList.remove('bg-slate-800/80', 'border-slate-700', 'opacity-60');
+          btn.classList.add('bg-red-500/20', 'border-red-500', 'text-red-300', 'opacity-100');
+        }
+      });
+
+      // Show Feedback Box
+      const expBox = document.getElementById('explanation-box');
+      const titleElem = document.getElementById('feedback-title');
+      const textElem = document.getElementById('explanation-text');
+
+      if (isCorrect) {
+        expBox.className = 'rounded-xl p-5 border space-y-3 transition-all bg-emerald-950/30 border-emerald-500/40';
+        titleElem.className = 'flex items-center space-x-2 font-bold text-lg text-emerald-400';
+        titleElem.innerHTML = `<i class="fa-solid fa-circle-check text-xl"></i><span>正解！</span>`;
+      } else {
+        expBox.className = 'rounded-xl p-5 border space-y-3 transition-all bg-red-950/30 border-red-500/40';
+        titleElem.className = 'flex items-center space-x-2 font-bold text-lg text-red-400';
+        titleElem.innerHTML = `<i class="fa-solid fa-circle-xmark text-xl"></i><span>不正解 (正解: ${escapeHtml(question.answer)})</span>`;
+      }
+
+      textElem.textContent = question.explanation;
+      expBox.classList.remove('hidden');
+    }
+
+    // 8. Next Question / Finish Test
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    // 9. Result Screen Logic
+    function showResults() {
+      const endTime = new Date();
+      const durationSeconds = Math.round((endTime - startTime) / 1000);
+
+      const total = quizQuestions.length;
+      const accuracy = Math.round((score / total) * 100);
+
+      document.getElementById('result-score').textContent = `${score} / ${total}`;
+      document.getElementById('result-accuracy').textContent = `${accuracy}%`;
+      document.getElementById('result-time').textContent = `${durationSeconds}秒`;
+
+      const retryBtn = document.getElementById('retry-wrong-btn');
+      const wrongListSection = document.getElementById('wrong-questions-section');
+      const wrongListContainer = document.getElementById('wrong-questions-list');
+
+      if (wrongQuestionsInSession.length > 0) {
+        retryBtn.classList.remove('hidden');
+        wrongListSection.classList.remove('hidden');
+        wrongListContainer.innerHTML = '';
+
+        wrongQuestionsInSession.forEach((q, idx) => {
+          const item = document.createElement('div');
+          item.className = 'bg-slate-800 border border-slate-700/80 p-4 rounded-xl space-y-2';
+          item.innerHTML = `
+            <div class="flex justify-between items-start text-xs text-slate-400">
+              <span class="font-bold text-red-400">#Q${q.id}</span>
+              <span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded">正解: ${escapeHtml(q.answer)}</span>
+            </div>
+            <p class="text-sm font-semibold text-slate-100">${escapeHtml(q.sentence)}</p>
+            <div class="red-pen-note p-2.5 rounded text-xs">
+              <i class="fa-solid fa-pen-nib mr-1"></i> ${escapeHtml(q.explanation)}
+            </div>
+          `;
+          wrongListContainer.appendChild(item);
+        });
+      } else {
+        retryBtn.classList.add('hidden');
+        wrongListSection.classList.add('hidden');
+      }
+
+      showScreen('result-screen');
+    }
+
+    // 10. Stats Modal Logic
+    function openStatsModal() {
+      loadStats();
+      renderStatsModal();
+      document.getElementById('stats-modal').classList.remove('hidden');
+    }
+
+    function closeStatsModal() {
+      document.getElementById('stats-modal').classList.add('hidden');
+    }
+
+    function renderStatsModal() {
+      const listContainer = document.getElementById('stats-list');
+      listContainer.innerHTML = '';
+
+      // Sort questions by wrong count desc
+      const sorted = [...rawQuestions].sort((a, b) => {
+        const wrongA = stats[a.id] ? stats[a.id].wrong : 0;
+        const wrongB = stats[b.id] ? stats[b.id].wrong : 0;
+        return wrongB - wrongA;
+      });
+
+      sorted.forEach(q => {
+        const qStat = stats[q.id] || { attempts: 0, wrong: 0 };
+        const wrongCount = qStat.wrong;
+        const attemptsCount = qStat.attempts;
+        const errRate = attemptsCount > 0 ? Math.round((wrongCount / attemptsCount) * 100) : 0;
+
+        const item = document.createElement('div');
+        item.className = 'bg-slate-900 border border-slate-700/60 p-3 rounded-xl flex items-center justify-between text-xs gap-3';
+        item.innerHTML = `
+          <div class="space-y-1 flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded font-bold bg-slate-800 text-indigo-400">#Q${q.id}</span>
+              <span class="text-slate-200 font-medium truncate">${escapeHtml(q.sentence)}</span>
+            </div>
+            <p class="text-slate-400 text-[11px] truncate"><i class="fa-solid fa-pen-nib text-red-400 mr-1"></i>${escapeHtml(q.explanation)}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="font-bold text-red-400 text-sm">誤答: ${wrongCount}回</div>
+            <div class="text-[10px] text-slate-500">挑戦 ${attemptsCount}回 (誤答率 ${errRate}%)</div>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    // Initialize Page
+    window.onload = function() {
+      loadStats();
+    };
+  </script>
+</body>
+</html>
