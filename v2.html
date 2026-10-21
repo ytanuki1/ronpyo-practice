@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>英文法・分詞克服マスター Let's Practice!</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    body {
+      font-family: 'Inter', sans-serif, system-ui;
+    }
+    .red-pen-note {
+      color: #991b1b;
+      font-weight: 600;
+      background-color: #fef2f2;
+      border-left: 4px solid #ef4444;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header Section -->
+  <header class="bg-slate-800/90 backdrop-blur-md border-b border-slate-700 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('mode-screen')">
+        <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+          <i class="fa-solid fa-graduation-cap text-xl"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-white">分詞マスター PRO</h1>
+          <p class="text-xs text-slate-400">プリント ＆ 例文集 徹底攻略</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="openStatsModal()" class="px-3 py-1.5 text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-all flex items-center gap-1.5 border border-slate-600">
+          <i class="fa-solid fa-chart-pie text-indigo-400"></i>
+          <span>苦手分析</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-3xl mx-auto px-4 py-8 w-full flex-grow flex items-center justify-center">
+
+    <!-- 1. Mode Selection & Config Screen -->
+    <div id="mode-screen" class="w-full space-y-6">
+      <div class="text-center space-y-2">
+        <span class="inline-block px-3 py-1 text-xs font-semibold bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">Let's Practice!</span>
+        <h2 class="text-3xl font-extrabold text-white tracking-tight">学習設定＆モード選択</h2>
+        <p class="text-slate-400 text-sm">出題範囲と問題数をカスタマイズして繰り返し演習できます</p>
+      </div>
+
+      <!-- Settings Box -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-xl space-y-5">
+        <!-- 1. Range Selection -->
+        <div>
+          <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">
+            <i class="fa-solid fa-layer-group mr-1"></i> 出題範囲（チェックボックス）
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="flex items-center space-x-3 bg-slate-900/60 hover:bg-slate-900 border border-slate-700/80 p-3.5 rounded-xl cursor-pointer transition-all">
+              <input type="checkbox" id="cat-print" checked class="w-5 h-5 text-indigo-600 bg-slate-800 border-slate-600 rounded focus:ring-indigo-500 focus:ring-2">
+              <div>
+                <div class="font-bold text-sm text-slate-200">プリント問題 (全20問)</div>
+                <div class="text-xs text-slate-400">文法プリント最後のページ</div>
+              </div>
+            </label>
+            <label class="flex items-center space-x-3 bg-slate-900/60 hover:bg-slate-900 border border-slate-700/80 p-3.5 rounded-xl cursor-pointer transition-all">
+              <input type="checkbox" id="cat-examples" checked class="w-5 h-5 text-indigo-600 bg-slate-800 border-slate-600 rounded focus:ring-indigo-500 focus:ring-2">
+              <div>
+                <div class="font-bold text-sm text-slate-200">例文集問題 (全35問)</div>
+                <div class="text-xs text-slate-400">No.258 〜 No.292</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- 2. Question Count Setting -->
+        <div>
+          <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">
+            <i class="fa-solid fa-list-ol mr-1"></i> 1回の出題数
+          </label>
+          <div class="flex items-center space-x-3">
+            <select id="question-count-select" class="bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none w-full sm:w-48 font-semibold">
+              <option value="10">10 問</option>
+              <option value="20" selected>20 問（デフォルト）</option>
+              <option value="30">30 問</option>
+              <option value="all">選択した全問題</option>
+            </select>
+            <span class="text-xs text-slate-400">※ランダムに抽出されます</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Buttons Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Normal Practice Mode -->
+        <div onclick="startQuiz('normal')" class="group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-indigo-500/50 p-6 rounded-2xl transition-all cursor-pointer shadow-xl hover:shadow-indigo-500/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400 mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-play text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">ランダム演習モード</h3>
+            <p class="text-slate-400 text-xs leading-relaxed">指定条件で問題と選択肢を完全シャッフル。無限リピート学習に最適です。</p>
+          </div>
+          <div class="mt-6 flex items-center text-xs font-semibold text-indigo-400 group-hover:text-indigo-300">
+            演習スタート <i class="fa-solid fa-arrow-right ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </div>
+
+        <!-- Weakness Focus Mode -->
+        <div onclick="startQuiz('weak')" class="group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700 hover:border-red-500/50 p-6 rounded-2xl transition-all cursor-pointer shadow-xl hover:shadow-red-500/10 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">苦手・誤答優先モード</h3>
+            <p class="text-slate-400 text-xs leading-relaxed">これまでに間違えた回数が多い問題を自動抽出し、集中的に克服します。</p>
+          </div>
+          <div class="mt-6 flex items-center text-xs font-semibold text-red-400 group-hover:text-red-300">
+            苦手克服スタート <i class="fa-solid fa-arrow-right ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats Footer Box -->
+      <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-fire text-amber-500 text-lg"></i>
+          <div>
+            <p class="text-xs text-slate-400">累計解答回数</p>
+            <p id="total-attempts-count" class="text-lg font-bold text-slate-100">0 回</p>
+          </div>
+        </div>
+        <button onclick="openStatsModal()" class="text-xs text-indigo-400 hover:underline flex items-center gap-1">
+          苦手データ詳細 <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Quiz Screen -->
+    <div id="quiz-screen" class="w-full hidden space-y-6">
+      <!-- Quiz Progress Bar Header -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-400">
+          <span id="quiz-progress-text">問題 1 / 20</span>
+          <span id="quiz-score-text">正解数: 0</span>
+        </div>
+        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+          <div id="quiz-progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-6">
+        <div class="flex justify-between items-start gap-2">
+          <span id="question-source-badge" class="px-2.5 py-1 text-xs font-bold bg-indigo-500/20 text-indigo-300 rounded-lg border border-indigo-500/30">プリント #Q1</span>
+          <span id="question-mode-badge" class="px-2.5 py-1 text-xs font-medium bg-slate-700 text-slate-300 rounded-lg">ランダム</span>
+        </div>
+
+        <div class="text-xl md:text-2xl font-bold text-white leading-relaxed tracking-wide" id="question-sentence">
+          <!-- Sentence inserted dynamically -->
+        </div>
+
+        <!-- Options Container -->
+        <div id="options-container" class="grid grid-cols-1 gap-3 pt-2">
+          <!-- Dynamic Option Buttons -->
+        </div>
+
+        <!-- Feedback & Explanation Box -->
+        <div id="explanation-box" class="hidden rounded-xl p-5 border space-y-3 transition-all">
+          <div class="flex items-center space-x-2 font-bold text-lg" id="feedback-title">
+            <!-- Icon & Status -->
+          </div>
+          
+          <div class="red-pen-note p-3.5 rounded-lg text-sm space-y-1">
+            <div class="flex items-center gap-1.5 text-xs text-red-600 font-bold uppercase tracking-wider">
+              <i class="fa-solid fa-pen-nib"></i> 解説・文法ポイント
+            </div>
+            <p id="explanation-text" class="text-slate-800 font-bold text-sm leading-relaxed"></p>
+          </div>
+
+          <div class="pt-2 flex justify-end">
+            <button id="next-btn" onclick="nextQuestion()" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+              次の問題へ <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Result Screen -->
+    <div id="result-screen" class="w-full hidden space-y-6">
+      <div class="text-center space-y-2">
+        <div class="inline-flex p-3 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-indigo-400 mb-2">
+          <i class="fa-solid fa-trophy text-3xl"></i>
+        </div>
+        <h2 class="text-3xl font-extrabold text-white">演習完了！</h2>
+        <p class="text-slate-400 text-sm">リザルトスコア</p>
+      </div>
+
+      <!-- Result Summary Cards -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">正解数</p>
+          <p id="result-score" class="text-2xl font-bold text-indigo-400 mt-1">0 / 0</p>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">正解率</p>
+          <p id="result-accuracy" class="text-2xl font-bold text-emerald-400 mt-1">0%</p>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+          <p class="text-xs text-slate-400">所要時間</p>
+          <p id="result-time" class="text-2xl font-bold text-amber-400 mt-1">0s</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button onclick="startQuiz('normal')" class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> 同じ条件で再挑戦
+        </button>
+        <button id="retry-wrong-btn" onclick="retryWrongQuestions()" class="flex-1 py-3 px-4 bg-red-600/80 hover:bg-red-500 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-red-600/20 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-filter"></i> 間違えた問題のみ解き直す
+        </button>
+      </div>
+
+      <!-- Wrong Questions List -->
+      <div id="wrong-questions-section" class="space-y-3 pt-2">
+        <h3 class="font-bold text-slate-200 text-base flex items-center gap-2">
+          <i class="fa-solid fa-circle-xmark text-red-500"></i> 今回間違えた問題の復習
+        </h3>
+        <div id="wrong-questions-list" class="space-y-3">
+          <!-- Dynamic insert wrong items -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 4. Stats Modal -->
+  <div id="stats-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-700 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-chart-line text-indigo-400 text-xl"></i>
+          <h3 class="font-bold text-lg text-white">問題別 誤答・苦手分析</h3>
+        </div>
+        <button onclick="closeStatsModal()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-5 overflow-y-auto flex-grow space-y-4">
+        <p class="text-xs text-slate-400">解答履歴に基づく誤答回数ランキングです。苦手傾向を把握して克服に活かしましょう。</p>
+        <div id="stats-list" class="space-y-2">
+          <!-- Dynamic Items -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-700 bg-slate-800/50 flex justify-between items-center rounded-b-2xl">
+        <button onclick="resetStats()" class="px-3 py-1.5 text-xs text-red-400 hover:bg-red-500/10 border border-red-500/30 rounded-lg transition-all flex items-center gap-1">
+          <i class="fa-solid fa-trash-can"></i> 履歴リセット
+        </button>
+        <button onclick="closeStatsModal()" class="px-4 py-1.5 text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-white rounded-lg">
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    <p>英文法 分詞・分詞構文 徹底マスターアプリ</p>
+  </footer>
+
+  <!-- JS Logic -->
+  <script>
+    // Full Questions Database (Print 1-20 + Example Sentences 258-292)
+    const rawQuestions = [
+      // === プリント問題 (1-20) ===
+      {
+        id: "P1",
+        category: "プリント",
+        sentence: "( Shocking / Shocked ) at the news, we just stood there.",
+        options: ["Shocking", "Shocked"],
+        answer: "Shocked",
+        explanation: "Beingの省略 / 受け身の分詞構文（ニュースに驚かされて、立ち尽くした）"
+      },
+      {
+        id: "P2",
+        category: "プリント",
+        sentence: "I keep the window ( closing / closed ) while I'm sleeping.",
+        options: ["closing", "closed"],
+        answer: "closed",
+        explanation: "keep + O + C / 窓は「閉められた状態に保たれる」ので過去分詞closed"
+      },
+      {
+        id: "P3",
+        category: "プリント",
+        sentence: "My sister is looking for his ( stealing / stolen ) bike.",
+        options: ["stealing", "stolen"],
+        answer: "stolen",
+        explanation: "盗まれた自転車 (stolen bike)"
+      },
+      {
+        id: "P4",
+        category: "プリント",
+        sentence: "Fred had a bad tooth ( pull / pulled ) out.",
+        options: ["pull", "pulled"],
+        answer: "pulled",
+        explanation: "使役動詞 have + O + 過去分詞 / 歯は抜かれるのでpulled"
+      },
+      {
+        id: "P5",
+        category: "プリント",
+        sentence: "I feel my heart ( beating / beaten ) wildly.",
+        options: ["beating", "beaten"],
+        answer: "beating",
+        explanation: "知覚動詞 feel + O + 現在分詞 / 心臓は自分で動く(能動)のでbeating"
+      },
+      {
+        id: "P6",
+        category: "プリント",
+        sentence: "He could make himself ( hearing / heard ) in the crowd.",
+        options: ["hearing", "heard"],
+        answer: "heard",
+        explanation: "make oneself heard : 自分の声を相手に届かせる（※make oneself understood「英語などが通じる」も重要）"
+      },
+      {
+        id: "P7",
+        category: "プリント",
+        sentence: "We saw him ( injuring / injure / injured ) on the stage.",
+        options: ["injuring", "injure", "injured"],
+        answer: "injured",
+        explanation: "be injuredで「ケガをする(受動)」ため過去分詞injured"
+      },
+      {
+        id: "P8",
+        category: "プリント",
+        sentence: "Don't leave the water ( run / running ).",
+        options: ["run", "running"],
+        answer: "running",
+        explanation: "leave + O + C (〜ing) : 水を流しっぱなしにしておくな"
+      },
+      {
+        id: "P9",
+        category: "プリント",
+        sentence: "I heard my name ( calling / called ) in the crowd.",
+        options: ["calling", "called"],
+        answer: "called",
+        explanation: "知覚動詞 + O + 過去分詞 / 名前は「呼ばれる」のでcalled"
+      },
+      {
+        id: "P10",
+        category: "プリント",
+        sentence: "He sat ( surround / surrounded / surrounding ) by his friends.",
+        options: ["surround", "surrounded", "surrounding"],
+        answer: "surrounded",
+        explanation: "分詞補語 : 〜に囲まれて座っている（受動の意味なのでsurrounded）"
+      },
+      {
+        id: "P11",
+        category: "プリント",
+        sentence: "I had my baggage ( carry / carrying / carried ) upstairs.",
+        options: ["carry", "carrying", "carried"],
+        answer: "carried",
+        explanation: "使役 have + O + 過去分詞 / 荷物は運ばれるのでcarried"
+      },
+      {
+        id: "P12",
+        category: "プリント",
+        sentence: "( Seeing / Seen ) from a distance, the rock looked like a face.",
+        options: ["Seeing", "Seen"],
+        answer: "Seen",
+        explanation: "受け身の分詞構文 (Being seen) / 主語the rockは「見られる」対象"
+      },
+      {
+        id: "P13",
+        category: "プリント",
+        sentence: "The woman was standing on the hill with her hair ( streaming / streamed ).",
+        options: ["streaming", "streamed"],
+        answer: "streaming",
+        explanation: "付帯状況 with + O + 〜ing : 髪をなびかせながら（髪が流れている能動的状態）"
+      },
+      {
+        id: "P14",
+        category: "プリント",
+        sentence: "( Having seen / Seeing ) the movie before, I didn't want to see it again.",
+        options: ["Having seen", "Seeing"],
+        answer: "Having seen",
+        explanation: "完了形の分詞構文 Having + p.p. / 「以前見た」という時制のズレを表す"
+      },
+      {
+        id: "P15",
+        category: "プリント",
+        sentence: "He waited for her to come back with the engine ( run / running / ran ).",
+        options: ["run", "running", "ran"],
+        answer: "running",
+        explanation: "付帯状況 with + O + 〜ing : エンジンをかけたまま（running）"
+      },
+      {
+        id: "P16",
+        category: "プリント",
+        sentence: "I heard someone ( calling / called ) her name.",
+        options: ["calling", "called"],
+        answer: "calling",
+        explanation: "知覚動詞 + O + 〜ing / 誰かが名前を「呼んでいる(能動)」のを聞く"
+      },
+      {
+        id: "P17",
+        category: "プリント",
+        sentence: "They stood ( talking / talked ) with each other.",
+        options: ["talking", "talked"],
+        answer: "talking",
+        explanation: "stand + 〜ing : 〜しながら立っている"
+      },
+      {
+        id: "P18",
+        category: "プリント",
+        sentence: "The boy had his precious bag ( stealing / stolen ).",
+        options: ["stealing", "stolen"],
+        answer: "stolen",
+        explanation: "have + O + 過去分詞（被害）: バッグを盗まれる"
+      },
+      {
+        id: "P19",
+        category: "プリント",
+        sentence: "I felt myself ( lifting / lifted ) up.",
+        options: ["lifting", "lifted"],
+        answer: "lifted",
+        explanation: "知覚 + O + 過去分詞 / 自分が「持ち上げられる」のを感じる"
+      },
+      {
+        id: "P20",
+        category: "プリント",
+        sentence: "I saw the book ( advertising / advertised ) in the paper.",
+        options: ["advertising", "advertised"],
+        answer: "advertised",
+        explanation: "知覚 + O + 過去分詞 / 本が「広告されている」のを見る"
+      },
+
+      // === 例文集問題 (258-292) ===
+      {
+        id: "E258",
+        category: "例文集",
+        sentence: "Firefighters entered the ( burning / burned ) house.",
+        options: ["burning", "burned"],
+        answer: "burning",
+        explanation: "現在分詞の限定用法 : 燃えている（進行中）家に入った"
+      },
+      {
+        id: "E259",
+        category: "例文集",
+        sentence: "Be careful of the ( breaking / broken ) glass.",
+        options: ["breaking", "broken"],
+        answer: "broken",
+        explanation: "過去分詞の限定用法 : 割れた（完了・状態）ガラスに注意しなさい"
+      },
+      {
+        id: "E260",
+        category: "例文集",
+        sentence: "Do you know the girl ( talking / talked ) to Sally?",
+        options: ["talking", "talked"],
+        answer: "talking",
+        explanation: "後置修飾（現在分詞）: サリーと話している（能動）女の子"
+      },
+      {
+        id: "E261",
+        category: "例文集",
+        sentence: "They have a son ( naming / named ) Chris.",
+        options: ["naming", "named"],
+        answer: "named",
+        explanation: "後置修飾（過去分詞）: クリスと名付けられた（受動）息子"
+      },
+      {
+        id: "E262",
+        category: "例文集",
+        sentence: "This will be an ( exciting / excited ) game.",
+        options: ["exciting", "excited"],
+        answer: "exciting",
+        explanation: "感情を表す分詞 : 事物(game)を修飾する場合は「興奮させる」exciting"
+      },
+      {
+        id: "E263",
+        category: "例文集",
+        sentence: "There were a lot of ( exciting / excited ) fans in the train.",
+        options: ["exciting", "excited"],
+        answer: "excited",
+        explanation: "感情を表す分詞 : 人(fans)が感情を受ける場合は「興奮した」excited"
+      },
+      {
+        id: "E264",
+        category: "例文集",
+        sentence: "The shopping mall will remain ( closing / closed ) until Thursday.",
+        options: ["closing", "closed"],
+        answer: "closed",
+        explanation: "remain + C (過去分詞) : 閉められた（閉館）状態のままである"
+      },
+      {
+        id: "E265",
+        category: "例文集",
+        sentence: "He came ( running / ran ) to us.",
+        options: ["running", "ran"],
+        answer: "running",
+        explanation: "come + 〜ing : 走ってやって来る（主語の動作・態様を表す）"
+      },
+      {
+        id: "E266",
+        category: "例文集",
+        sentence: "She kept me ( waiting / waited ) for an hour.",
+        options: ["waiting", "waited"],
+        answer: "waiting",
+        explanation: "keep + O + 〜ing : O(私)をずっと待たせ続ける（能動的状態）"
+      },
+      {
+        id: "E267",
+        category: "例文集",
+        sentence: "Keep the door ( locking / locked ) at night.",
+        options: ["locking", "locked"],
+        answer: "locked",
+        explanation: "keep + O + 過去分詞 : ドアが施錠された状態を保つ"
+      },
+      {
+        id: "E268",
+        category: "例文集",
+        sentence: "I saw Steve ( waiting / waited ) for a bus.",
+        options: ["waiting", "waited"],
+        answer: "waiting",
+        explanation: "知覚動詞 see + O + 〜ing : スティーブがバスを待っている（能動・進行）のを見る"
+      },
+      {
+        id: "E269",
+        category: "例文集",
+        sentence: "I saw the book ( advertising / advertised ) in the paper.",
+        options: ["advertising", "advertised"],
+        answer: "advertised",
+        explanation: "知覚動詞 see + O + 過去分詞 : 本が新聞に広告されている（受動）を見る"
+      },
+      {
+        id: "E270",
+        category: "例文集",
+        sentence: "She had her hair ( cut / cutting ).",
+        options: ["cut", "cutting"],
+        answer: "cut",
+        explanation: "have + O + 過去分詞 : 髪を切ってもらう（cutの過去分詞形はcut）"
+      },
+      {
+        id: "E271",
+        category: "例文集",
+        sentence: "She had her bag ( stealing / stolen ).",
+        options: ["stealing", "stolen"],
+        answer: "stolen",
+        explanation: "have + O + 過去分詞（被害）: バッグを盗まれる"
+      },
+      {
+        id: "E272",
+        category: "例文集",
+        sentence: "Can you make yourself ( understand / understood ) in English?",
+        options: ["understand", "understood"],
+        answer: "understood",
+        explanation: "make oneself understood : 自分の言わんとすることを相手に理解させる・英語が通じる"
+      },
+      {
+        id: "E273",
+        category: "例文集",
+        sentence: "I walked around the town ( taking / taken ) pictures.",
+        options: ["taking", "taken"],
+        answer: "taking",
+        explanation: "分詞構文（付帯状況）: 写真を撮りながら街を歩いた"
+      },
+      {
+        id: "E274",
+        category: "例文集",
+        sentence: "( Writing / Written ) in plain English, this book is easy to read.",
+        options: ["Writing", "Written"],
+        answer: "Written",
+        explanation: "受動の分詞構文 (Being written) : わかりやすい英語で書かれているので（本＝書かれる対象）"
+      },
+      {
+        id: "E275",
+        category: "例文集",
+        sentence: "I just stood there, ( not knowing / not known ) what to do.",
+        options: ["not knowing", "not known"],
+        answer: "not knowing",
+        explanation: "分詞構文の否定形 : not / never を分詞の直前に置く"
+      },
+      {
+        id: "E276",
+        category: "例文集",
+        sentence: "We sat up all night, ( talking / talked ) on the phone.",
+        options: ["talking", "talked"],
+        answer: "talking",
+        explanation: "分詞構文（付帯状況）: 電話で話しながら一晩中起きていた"
+      },
+      {
+        id: "E277",
+        category: "例文集",
+        sentence: "( Playing / Played ) soccer, he hurt his leg.",
+        options: ["Playing", "Played"],
+        answer: "Playing",
+        explanation: "分詞構文（時・〜しているとき）: サッカーをしているときに脚を痛めた"
+      },
+      {
+        id: "E278",
+        category: "例文集",
+        sentence: "The train leaves Nagoya at eight, ( arriving / arrived ) in Tokyo at ten.",
+        options: ["arriving", "arrived"],
+        answer: "arriving",
+        explanation: "分詞構文（連続結果）: 電車は8時に名古屋を出発し、10時に東京に到着する"
+      },
+      {
+        id: "E279",
+        category: "例文集",
+        sentence: "( Feeling / Felt ) sick, I went to see a doctor.",
+        options: ["Feeling", "Felt"],
+        answer: "Feeling",
+        explanation: "分詞構文（原因・理由）: 気分が悪かったので病院へ行った"
+      },
+      {
+        id: "E280",
+        category: "例文集",
+        sentence: "( Having finished / Finishing ) my homework, I went to bed.",
+        options: ["Having finished", "Finishing"],
+        answer: "Having finished",
+        explanation: "完了形の分詞構文 Having + p.p. : 宿題を終わらせた後で（主節の過去形より前の出来事）"
+      },
+      {
+        id: "E281",
+        category: "例文集",
+        sentence: "It ( being / was ) the holiday season, the train was full.",
+        options: ["being", "was"],
+        answer: "being",
+        explanation: "独立分詞構文 : 主節の主語(the train)と分詞の主語(It)が異なるため It being と残す"
+      },
+      {
+        id: "E282",
+        category: "例文集",
+        sentence: "( Judging / Judged ) from this picture, he is very tall.",
+        options: ["Judging", "Judged"],
+        answer: "Judging",
+        explanation: "慣用的な独立分詞構文 : judging from 〜「〜から判断すると」"
+      },
+      {
+        id: "E283",
+        category: "例文集",
+        sentence: "He waited for her to come back with the engine ( running / run ).",
+        options: ["running", "run"],
+        answer: "running",
+        explanation: "付帯状況 with + O + 〜ing : エンジンをかけたまま（running）"
+      },
+      {
+        id: "E284",
+        category: "例文集",
+        sentence: "The woman was sitting with her legs ( crossed / crossing ).",
+        options: ["crossed", "crossing"],
+        answer: "crossed",
+        explanation: "付帯状況 with + O + 過去分詞 : 足は「組まれる」関係なので crossed"
+      },
+      {
+        id: "E285",
+        category: "例文集",
+        sentence: "There were some boys ( playing / played ) soccer on the field.",
+        options: ["playing", "played"],
+        answer: "playing",
+        explanation: "There is + 名詞 + 分詞 : グラウンドでサッカーをしている(能動)少年たちがいた"
+      },
+      {
+        id: "E286",
+        category: "例文集",
+        sentence: "There are only two days ( leaving / left ) until the school festival.",
+        options: ["leaving", "left"],
+        answer: "left",
+        explanation: "There is + 名詞 + 過去分詞 : 文化祭まで残された(left)日数はあと2日だ"
+      },
+      {
+        id: "E287",
+        category: "例文集",
+        sentence: "We went ( skiing / skied ) in Nagano.",
+        options: ["skiing", "skied"],
+        answer: "skiing",
+        explanation: "go + 〜ing (分詞/動名詞表現) : 長野へスキーをしに行った (go skiing)"
+      },
+      {
+        id: "E288",
+        category: "例文集",
+        sentence: "He is busy ( preparing / prepared ) for the exam.",
+        options: ["preparing", "prepared"],
+        answer: "preparing",
+        explanation: "be busy (in) 〜ing : 〜するのに忙しい"
+      },
+      {
+        id: "E289",
+        category: "例文集",
+        sentence: "I've had some difficulty ( doing / done ) the work.",
+        options: ["doing", "done"],
+        answer: "doing",
+        explanation: "have difficulty (in) 〜ing : 〜するのが難しい / 〜するのに苦労する"
+      },
+      {
+        id: "E290",
+        category: "例文集",
+        sentence: "I spent an hour ( chatting / chatted ) on the phone.",
+        options: ["chatting", "chatted"],
+        answer: "chatting",
+        explanation: "spend time (in) 〜ing : 〜して時間を過ごす"
+      },
+      {
+        id: "E291",
+        category: "例文集",
+        sentence: "We had a good time ( playing / played ) beach volleyball.",
+        options: ["playing", "played"],
+        answer: "playing",
+        explanation: "have a good time (in) 〜ing : 〜して楽しく過ごす"
+      },
+      {
+        id: "E292",
+        category: "例文集",
+        sentence: "We ended up ( playing / played ) video games at home.",
+        options: ["playing", "played"],
+        answer: "playing",
+        explanation: "end up 〜ing : 結局〜することになる"
+      }
+    ];
+
+    // App State
+    let quizQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let wrongQuestionsInSession = [];
+    let startTime = null;
+    let stats = {};
+
+    // LocalStorage Functions
+    function loadStats() {
+      const saved = localStorage.getItem('grammar_quiz_v2_stats');
+      if (saved) {
+        try {
+          stats = JSON.parse(saved);
+        } catch (e) {
+          stats = {};
+        }
+      }
+      rawQuestions.forEach(q => {
+        if (!stats[q.id]) {
+          stats[q.id] = { attempts: 0, wrong: 0 };
+        }
+      });
+      updateHomeStats();
+    }
+
+    function saveStats() {
+      localStorage.setItem('grammar_quiz_v2_stats', JSON.stringify(stats));
+      updateHomeStats();
+    }
+
+    function recordAnswer(qId, isCorrect) {
+      if (!stats[qId]) {
+        stats[qId] = { attempts: 0, wrong: 0 };
+      }
+      stats[qId].attempts += 1;
+      if (!isCorrect) {
+        stats[qId].wrong += 1;
+      }
+      saveStats();
+    }
+
+    function resetStats() {
+      if (confirm('すべての解答・苦手データを初期化しますか？')) {
+        stats = {};
+        rawQuestions.forEach(q => {
+          stats[q.id] = { attempts: 0, wrong: 0 };
+        });
+        saveStats();
+        renderStatsModal();
+      }
+    }
+
+    function updateHomeStats() {
+      let totalAttempts = 0;
+      Object.values(stats).forEach(s => {
+        totalAttempts += s.attempts;
+      });
+      const attemptsElem = document.getElementById('total-attempts-count');
+      if (attemptsElem) {
+        attemptsElem.textContent = `${totalAttempts} 回`;
+      }
+    }
+
+    // Array Shuffle
+    function shuffleArray(array) {
+      const newArr = [...array];
+      for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+      }
+      return newArr;
+    }
+
+    // Screen Nav
+    function showScreen(screenId) {
+      document.getElementById('mode-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.add('hidden');
+
+      document.getElementById(screenId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Filter Candidates by Checkboxes
+    function getSelectedPool() {
+      const includePrint = document.getElementById('cat-print').checked;
+      const includeExamples = document.getElementById('cat-examples').checked;
+
+      if (!includePrint && !includeExamples) {
+        alert('「プリント」または「例文集」の少なくとも一方を選択してください。');
+        return null;
+      }
+
+      return rawQuestions.filter(q => {
+        if (q.category === 'プリント' && includePrint) return true;
+        if (q.category === '例文集' && includeExamples) return true;
+        return false;
+      });
+    }
+
+    // Start Quiz Engine
+    function startQuiz(mode) {
+      loadStats();
+      const pool = getSelectedPool();
+      if (!pool || pool.length === 0) return;
+
+      score = 0;
+      currentQuestionIndex = 0;
+      wrongQuestionsInSession = [];
+      startTime = new Date();
+
+      let selectedList = [];
+
+      if (mode === 'normal') {
+        selectedList = shuffleArray(pool);
+      } else if (mode === 'weak') {
+        // Sort by wrong count descending
+        let sortedPool = [...pool].sort((a, b) => {
+          const wrongA = stats[a.id] ? stats[a.id].wrong : 0;
+          const wrongB = stats[b.id] ? stats[b.id].wrong : 0;
+          return wrongB - wrongA;
+        });
+
+        let weakOnly = sortedPool.filter(q => stats[q.id] && stats[q.id].wrong > 0);
+        if (weakOnly.length < 5) {
+          weakOnly = sortedPool;
+        }
+        selectedList = shuffleArray(weakOnly);
+      }
+
+      // Question Count truncation
+      const countVal = document.getElementById('question-count-select').value;
+      if (countVal !== 'all') {
+        const targetCount = parseInt(countVal, 10);
+        selectedList = selectedList.slice(0, targetCount);
+      }
+
+      quizQuestions = selectedList;
+      showScreen('quiz-screen');
+      renderQuestion();
+    }
+
+    function retryWrongQuestions() {
+      if (wrongQuestionsInSession.length === 0) return;
+      quizQuestions = shuffleArray(wrongQuestionsInSession);
+      score = 0;
+      currentQuestionIndex = 0;
+      wrongQuestionsInSession = [];
+      startTime = new Date();
+
+      showScreen('quiz-screen');
+      renderQuestion();
+    }
+
+    // Render Question Card
+    function renderQuestion() {
+      const q = quizQuestions[currentQuestionIndex];
+
+      document.getElementById('quiz-progress-text').textContent = `問題 ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+      document.getElementById('quiz-score-text').textContent = `正解数: ${score}`;
+      
+      const progressPercent = ((currentQuestionIndex) / quizQuestions.length) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+
+      document.getElementById('question-source-badge').textContent = `${q.category} [${q.id}]`;
+      document.getElementById('question-sentence').textContent = q.sentence;
+
+      // Hide explanation
+      const expBox = document.getElementById('explanation-box');
+      expBox.classList.add('hidden');
+
+      // Shuffle options
+      const shuffledOptions = shuffleArray(q.options);
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn w-full text-left p-4 rounded-xl font-semibold border border-slate-700 bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500 transition-all text-slate-100 flex justify-between items-center group';
+        btn.innerHTML = `
+          <span>${escapeHtml(opt)}</span>
+          <i class="fa-solid fa-chevron-right text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all text-sm"></i>
+        `;
+        btn.onclick = () => selectOption(opt, q);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Option Selection
+    function selectOption(selectedOpt, question) {
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-60', 'cursor-not-allowed');
+      });
+
+      const isCorrect = (selectedOpt === question.answer);
+
+      recordAnswer(question.id, isCorrect);
+
+      if (isCorrect) {
+        score++;
+      } else {
+        wrongQuestionsInSession.push(question);
+      }
+
+      buttons.forEach(btn => {
+        const text = btn.querySelector('span').textContent;
+        if (text === question.answer) {
+          btn.classList.remove('bg-slate-800/80', 'border-slate-700', 'opacity-60');
+          btn.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-300', 'opacity-100');
+        }
+        if (text === selectedOpt && !isCorrect) {
+          btn.classList.remove('bg-slate-800/80', 'border-slate-700', 'opacity-60');
+          btn.classList.add('bg-red-500/20', 'border-red-500', 'text-red-300', 'opacity-100');
+        }
+      });
+
+      const expBox = document.getElementById('explanation-box');
+      const titleElem = document.getElementById('feedback-title');
+      const textElem = document.getElementById('explanation-text');
+
+      if (isCorrect) {
+        expBox.className = 'rounded-xl p-5 border space-y-3 transition-all bg-emerald-950/30 border-emerald-500/40';
+        titleElem.className = 'flex items-center space-x-2 font-bold text-lg text-emerald-400';
+        titleElem.innerHTML = `<i class="fa-solid fa-circle-check text-xl"></i><span>正解！</span>`;
+      } else {
+        expBox.className = 'rounded-xl p-5 border space-y-3 transition-all bg-red-950/30 border-red-500/40';
+        titleElem.className = 'flex items-center space-x-2 font-bold text-lg text-red-400';
+        titleElem.innerHTML = `<i class="fa-solid fa-circle-xmark text-xl"></i><span>不正解 (正解: ${escapeHtml(question.answer)})</span>`;
+      }
+
+      textElem.textContent = question.explanation;
+      expBox.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < quizQuestions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    // Results Display
+    function showResults() {
+      const endTime = new Date();
+      const durationSeconds = Math.round((endTime - startTime) / 1000);
+
+      const total = quizQuestions.length;
+      const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+
+      document.getElementById('result-score').textContent = `${score} / ${total}`;
+      document.getElementById('result-accuracy').textContent = `${accuracy}%`;
+      document.getElementById('result-time').textContent = `${durationSeconds}秒`;
+
+      const retryBtn = document.getElementById('retry-wrong-btn');
+      const wrongListSection = document.getElementById('wrong-questions-section');
+      const wrongListContainer = document.getElementById('wrong-questions-list');
+
+      if (wrongQuestionsInSession.length > 0) {
+        retryBtn.classList.remove('hidden');
+        wrongListSection.classList.remove('hidden');
+        wrongListContainer.innerHTML = '';
+
+        wrongQuestionsInSession.forEach((q) => {
+          const item = document.createElement('div');
+          item.className = 'bg-slate-800 border border-slate-700/80 p-4 rounded-xl space-y-2';
+          item.innerHTML = `
+            <div class="flex justify-between items-start text-xs text-slate-400">
+              <span class="font-bold text-indigo-400">${q.category} [${q.id}]</span>
+              <span class="bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-bold">正解: ${escapeHtml(q.answer)}</span>
+            </div>
+            <p class="text-sm font-semibold text-slate-100">${escapeHtml(q.sentence)}</p>
+            <div class="red-pen-note p-2.5 rounded text-xs">
+              <i class="fa-solid fa-pen-nib mr-1"></i> ${escapeHtml(q.explanation)}
+            </div>
+          `;
+          wrongListContainer.appendChild(item);
+        });
+      } else {
+        retryBtn.classList.add('hidden');
+        wrongListSection.classList.add('hidden');
+      }
+
+      showScreen('result-screen');
+    }
+
+    // Modal Operations
+    function openStatsModal() {
+      loadStats();
+      renderStatsModal();
+      document.getElementById('stats-modal').classList.remove('hidden');
+    }
+
+    function closeStatsModal() {
+      document.getElementById('stats-modal').classList.add('hidden');
+    }
+
+    function renderStatsModal() {
+      const listContainer = document.getElementById('stats-list');
+      listContainer.innerHTML = '';
+
+      const sorted = [...rawQuestions].sort((a, b) => {
+        const wrongA = stats[a.id] ? stats[a.id].wrong : 0;
+        const wrongB = stats[b.id] ? stats[b.id].wrong : 0;
+        return wrongB - wrongA;
+      });
+
+      sorted.forEach(q => {
+        const qStat = stats[q.id] || { attempts: 0, wrong: 0 };
+        const wrongCount = qStat.wrong;
+        const attemptsCount = qStat.attempts;
+        const errRate = attemptsCount > 0 ? Math.round((wrongCount / attemptsCount) * 100) : 0;
+
+        const item = document.createElement('div');
+        item.className = 'bg-slate-900 border border-slate-700/60 p-3 rounded-xl flex items-center justify-between text-xs gap-3';
+        item.innerHTML = `
+          <div class="space-y-1 flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded font-bold bg-slate-800 text-indigo-400 flex-shrink-0">${q.category} [${q.id}]</span>
+              <span class="text-slate-200 font-medium truncate">${escapeHtml(q.sentence)}</span>
+            </div>
+            <p class="text-slate-400 text-[11px] truncate"><i class="fa-solid fa-pen-nib text-red-400 mr-1"></i>${escapeHtml(q.explanation)}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="font-bold text-red-400 text-sm">誤答: ${wrongCount}回</div>
+            <div class="text-[10px] text-slate-500">挑戦 ${attemptsCount}回 (誤答率 ${errRate}%)</div>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    window.onload = function() {
+      loadStats();
+    };
+  </script>
+</body>
+</html>
