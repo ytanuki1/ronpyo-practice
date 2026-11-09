@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate English Relative Pronouns & Adverbs Master (関係詞 徹底演習)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#151f32',
+                            950: '#0b1120',
+                        },
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #0b1120;
+            color: #f1f5f9;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .animate-bounce-short {
+            animation: bounce 0.5s ease infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-6px); }
+        }
+        .word-chip {
+            touch-action: manipulation;
+            user-select: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/20 text-white">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide text-white flex items-center gap-2">
+                        関係詞 Master <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">Ultimate v2</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">高校英語 補足プリント・章末・発展問題 徹底解法</p>
+                </div>
+            </div>
+
+            <!-- Controls (Sound, Reset, Mode) -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button id="soundToggleBtn" onclick="toggleSound()" class="p-2.5 rounded-xl glass-card hover:bg-slate-800 text-slate-300 hover:text-white transition-all flex items-center gap-1.5 text-xs font-medium" title="効果音切り替え">
+                    <i id="soundIcon" class="fa-solid fa-volume-high text-blue-400"></i>
+                    <span class="hidden sm:inline" id="soundText">ON</span>
+                </button>
+                <button onclick="resetStats()" class="p-2.5 rounded-xl glass-card hover:bg-slate-800 text-slate-300 hover:text-white transition-all text-xs font-medium" title="成績リセット">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="hidden sm:inline ml-1">リセット</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-6 flex-grow flex flex-col gap-6">
+
+        <!-- Progress Header Banner -->
+        <div class="glass-panel rounded-2xl p-4 sm:p-5 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-3">
+                <div class="flex items-center gap-4">
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">進行度</div>
+                        <div class="text-xl font-bold text-white"><span id="currIdx">1</span> / <span id="totalCount">0</span></div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-700"></div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">正解率</div>
+                        <div class="text-xl font-bold text-emerald-400"><span id="accuracyRate">0</span>%</div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-700"></div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">連続正解</div>
+                        <div class="text-xl font-bold text-amber-400 flex items-center gap-1">
+                            <i class="fa-solid fa-fire text-sm"></i> <span id="streakCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Selector -->
+                <div class="w-full sm:w-auto">
+                    <select id="modeFilter" onchange="changeFilterMode()" class="w-full sm:w-auto bg-slate-900 text-slate-200 border border-slate-700 text-xs sm:text-sm rounded-xl px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer font-medium">
+                        <option value="all">📚 全問題（全60問＋）</option>
+                        <option value="print">📄 プリント・章末問題メイン</option>
+                        <option value="new">🔥 新規・発展応用演習</option>
+                        <option value="review" id="reviewOption" disabled>⚠️ ミスした問題のみ復習 (0)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Top Progress Bar -->
+            <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+        </div>
+
+        <!-- Question Card Container -->
+        <div id="quizContainer" class="glass-panel rounded-3xl p-5 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
+
+            <!-- Question Metadata Header -->
+            <div class="flex items-center justify-between gap-2 mb-4">
+                <div class="flex items-center gap-2">
+                    <span id="badgeCategory" class="px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                        文法演習
+                    </span>
+                    <span id="badgeType" class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-800 text-slate-400 border border-slate-700">
+                        4択
+                    </span>
+                </div>
+                <div class="text-xs text-slate-400 font-mono" id="questionSource">
+                    Ultimate p298~300
+                </div>
+            </div>
+
+            <!-- Question Prompt Title & Text -->
+            <div class="mb-6">
+                <h2 id="questionPrompt" class="text-base sm:text-lg font-bold text-slate-200 mb-2">
+                    ( ) に入る最も適切なものを選びなさい。
+                </h2>
+                <div id="questionJapanese" class="text-xs sm:text-sm text-slate-400 mb-3 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                    日本語訳がここに表示されます。
+                </div>
+                <div id="questionSentence" class="text-lg sm:text-2xl font-semibold text-white tracking-wide leading-relaxed bg-slate-950/80 p-4 sm:p-5 rounded-2xl border border-slate-800/80 shadow-inner">
+                    I know a student ( &nbsp;&nbsp;&nbsp;&nbsp; ) can play the piano well.
+                </div>
+            </div>
+
+            <!-- Answer Input Area (Dynamic: Choice / Text / Reorder) -->
+            <div id="interactiveArea" class="mb-6">
+                <!-- Will be populated dynamically by JS -->
+            </div>
+
+            <!-- Submit Button (For text and reorder) -->
+            <div id="actionArea" class="hidden mb-6">
+                <button id="submitBtn" onclick="checkAnswer()" class="w-full py-3.5 px-6 rounded-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                    <span>回答する</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Feedback & Explanation Card (Hidden by default) -->
+            <div id="explanationContainer" class="hidden mt-6 pt-6 border-t border-slate-800 animate-fadeIn">
+                <div id="feedbackResult" class="flex items-center gap-3 p-4 rounded-2xl mb-4 font-bold text-lg">
+                    <!-- Dynamic result icon + text -->
+                </div>
+
+                <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-700/60">
+                    <h3 class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open"></i> 解説 / 英文法ポイント
+                    </h3>
+                    <div id="explanationText" class="text-xs sm:text-sm text-slate-200 leading-relaxed space-y-2">
+                        ここに詳しい解説が表示されます。
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <button onclick="nextQuestion()" class="mt-5 w-full py-3.5 px-6 rounded-xl font-bold bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 active:scale-[0.99] transition-all flex items-center justify-center gap-2 shadow-lg">
+                    <span>次の問題へ</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Completion Modal / Final Summary Screen (Hidden initially) -->
+        <div id="summaryCard" class="hidden glass-panel rounded-3xl p-6 sm:p-10 shadow-2xl text-center">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-3xl text-slate-950 font-black shadow-lg shadow-yellow-500/20 animate-bounce-short">
+                🏆
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">演習完了！お疲れ様でした</h2>
+            <p class="text-slate-400 text-xs sm:text-sm mb-6">関係詞の知識をしっかりと整理・定着できました！</p>
+
+            <div class="grid grid-cols-3 gap-3 sm:gap-4 mb-8">
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">総解答数</div>
+                    <div class="text-2xl font-extrabold text-white" id="summaryTotal">0</div>
+                </div>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">正解数</div>
+                    <div class="text-2xl font-extrabold text-emerald-400" id="summaryCorrect">0</div>
+                </div>
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">最終正解率</div>
+                    <div class="text-2xl font-extrabold text-blue-400" id="summaryAccuracy">0%</div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button id="reviewMissedBtn" onclick="startReviewMode()" class="px-6 py-3.5 rounded-xl font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 disabled:opacity-50">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>間違えた問題を復習する</span>
+                </button>
+                <button onclick="restartQuiz()" class="px-6 py-3.5 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 text-white transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>最初からもう一度解く</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center text-xs text-slate-500 border-t border-slate-800/80">
+        高校英語 関係詞 完全攻略演習システム &bull; Comprehensive Relative Practice
+    </footer>
+
+    <!-- App Script & Comprehensive Question Bank -->
+    <script>
+        // Audio Synthesizer via Web Audio API
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    audioCtx = new AudioContext();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const now = ctx.currentTime;
+
+                if (type === 'correct') {
+                    // Cheerful rising tone
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'incorrect') {
+                    // Low error buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.setValueAtTime(130, now + 0.12);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            } catch (e) {
+                console.log("Audio not supported or blocked", e);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            const txt = document.getElementById('soundText');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high text-blue-400';
+                txt.textContent = 'ON';
+                playSound('click');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+                txt.textContent = 'OFF';
+            }
+        }
+
+        // -------------------------------------------------------------
+        // QUESTION BANK (Includes ALL Print/Textbook Questions + Extensive New Practice)
+        // -------------------------------------------------------------
+        const questionBank = [
+            // --- SECTION 1: Ultimate Print & Textbook Core Questions ---
+            {
+                id: 1,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な関係代名詞を選びなさい。',
+                sentence: 'I know a student ( ____ ) can play the piano well.',
+                jp: '私はピアノが上手に弾ける生徒を知っている。',
+                source: 'Ultimate p298~300 / 章末1(1)',
+                choices: ['who', 'which', 'whom', 'whose'],
+                answer: 'who',
+                explanation: '先行詞は「a student」（人）で、関係代名詞節内で主語（S）の働きをしているため、主格の関係代名詞 <b>who</b> を用います。'
+            },
+            {
+                id: 2,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な関係代名詞を選びなさい。',
+                sentence: 'This is the bag ( ____ ) I bought yesterday.',
+                jp: 'これは私が昨日買ったバッグです。',
+                source: 'Ultimate p298~300 / 章末1(2)',
+                choices: ['who', 'whom', 'which', 'whose'],
+                answer: 'which',
+                explanation: '先行詞は「the bag」（物）で、関係代名詞節内で目的語（O）の働き（bought の目的語）をしているため、目的格の <b>which</b> (または that) を用います。'
+            },
+            {
+                id: 3,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な関係代名詞を選びなさい。',
+                sentence: 'I saw a man ( ____ ) wallet had been stolen.',
+                jp: '私は財布を盗まれた男性を見かけた。',
+                source: 'Ultimate p298~300 / 章末1(3)',
+                choices: ['who', 'whom', 'which', 'whose'],
+                answer: 'whose',
+                explanation: '「その男性の財布（his wallet）」という所有の関係を表すため、所有格の <b>whose</b> を用きます。'
+            },
+            {
+                id: 4,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な関係代名詞を選びなさい。',
+                sentence: 'I know the boy and the dog ( ____ ) are running in the park.',
+                jp: '私は公園を走っている男の子と犬を知っている。',
+                source: 'Ultimate p301~302 / 章末1(4)',
+                choices: ['who', 'which', 'that', 'what'],
+                answer: 'that',
+                explanation: '先行詞が「人と動物（the boy and the dog）」の両方を含む場合は、関係代名詞 <b>that</b> を好んで用います。'
+            },
+            {
+                id: 5,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'That is the house in ( ____ ) a famous actor lives.',
+                jp: 'あれは有名な俳優が住んでいる家です。',
+                source: 'Ultimate p304 / 章末1(5)',
+                choices: ['which', 'that', 'where', 'whose'],
+                answer: 'which',
+                explanation: '前置詞（in）の直後には関係代名詞 that は使用できません。先行詞が「物（the house）」なので <b>in which</b> となります。（= where a famous actor lives）'
+            },
+            {
+                id: 6,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'I watched a movie, ( ____ ) I thought interesting.',
+                jp: '私は映画を見たが、それは面白いと思った。',
+                source: 'Ultimate p306 / 章末1(6)',
+                choices: ['that', 'which', 'what', 'where'],
+                answer: 'which',
+                explanation: 'カンマがある非限定用法（継続用法）です。that はカンマの後ろで非限定用法として使えないため、<b>which</b> が正解です。'
+            },
+            {
+                id: 7,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'This is the apartment ( ____ ) I lived 5 years ago.',
+                jp: 'ここが5年前に私が住んでいたアパートです。',
+                source: 'Ultimate p310 / 章末1(7)',
+                choices: ['which', 'where', 'which in', 'that in'],
+                answer: 'where',
+                explanation: '関係副詞節内が「I lived (in the apartment)」と完全な文の構造（livedは自動詞）になっており、場所を表す先行詞を受けるため関係副詞 <b>where</b> が入ります。'
+            },
+            {
+                id: 8,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'There are some situations ( ____ ) we have to tell a lie.',
+                jp: '嘘をつかなければならない状況もある。',
+                source: 'Plus α p311 / 章末1(8)',
+                choices: ['which', 'where', 'that', 'why'],
+                answer: 'where',
+                explanation: '先行詞が situation（状況）, case（場合）, point（点）などの抽象的な「場所・場面」を表すときも、関係副詞 <b>where</b> を使用します。'
+            },
+            {
+                id: 9,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'This is the reason ( ____ ) I like dogs.',
+                jp: 'これが私が犬を好きな理由です。',
+                source: 'Ultimate p313 / 章末1(9)',
+                choices: ['why', 'which', 'because', 'how'],
+                answer: 'why',
+                explanation: '先行詞 the reason を受け、理由を表す関係副詞 <b>why</b> が適切です。'
+            },
+            {
+                id: 10,
+                cat: 'print',
+                type: 'fill',
+                prompt: '2つの文を1文にまとめるとき、（ &nbsp; ）に入る語を答えなさい。<br><span class="text-xs text-blue-400">This is a book. + It makes us happy.</span>',
+                sentence: 'This is a book ( ____ ) makes us happy.',
+                jp: 'これは私たちを幸せにする本です。',
+                source: '章末問題 2(1)',
+                choices: [],
+                answer: 'which',
+                explanation: 'It (主語・物) を関係代名詞に置き換えるため、主格の <b>which</b> （または that）が入ります。'
+            },
+            {
+                id: 11,
+                cat: 'print',
+                type: 'fill',
+                prompt: '2つの文を1文にまとめるとき、（ &nbsp; ）に入る語を答えなさい。<br><span class="text-xs text-blue-400">The man was kind. + I met him in the park.</span>',
+                sentence: 'The man ( ____ ) I met in the park was kind.',
+                jp: '私が公園で会った男性は親切だった。',
+                source: '章末問題 2(2)',
+                choices: [],
+                answer: 'whom',
+                explanation: 'him (目的語・人) を関係代名詞にするため、目的格の <b>whom</b> (または who/that) が入ります。'
+            },
+            {
+                id: 12,
+                cat: 'print',
+                type: 'fill',
+                prompt: '2つの文を1文にまとめるとき、（ &nbsp; ）に入る語を答えなさい。<br><span class="text-xs text-blue-400">I know the girl. + Her father is a doctor.</span>',
+                sentence: 'I know the girl ( ____ ) father is a doctor.',
+                jp: '私は父親が医師である少女を知っている。',
+                source: '章末問題 2(5)',
+                choices: [],
+                answer: 'whose',
+                explanation: 'Her father（所有格）を繋ぐため、所有格の関係代名詞 <b>whose</b> が正解です。'
+            },
+            {
+                id: 13,
+                cat: 'print',
+                type: 'fill',
+                prompt: '2つの文を1文にまとめるとき、（ &nbsp; ）に入る関係副詞を答えなさい。<br><span class="text-xs text-blue-400">Do you remember the house? + You were born there.</span>',
+                sentence: 'Do you remember the house ( ____ ) you were born?',
+                jp: 'あなたが生まれた家を覚えていますか？',
+                source: '章末問題 2(6)',
+                choices: [],
+                answer: 'where',
+                explanation: 'there (そこで: 副詞) を消去し、場所を表す関係副詞 <b>where</b> に置き換えます。'
+            },
+            {
+                id: 14,
+                cat: 'print',
+                type: 'fill',
+                prompt: '2つの文を1文にまとめるとき、（ &nbsp; ）に入る語を答えなさい。<br><span class="text-xs text-blue-400">Tim stayed here until nine. + My parents came back then.</span>',
+                sentence: 'Tim stayed here until nine, ( ____ ) my parents came back.',
+                jp: 'ティムは9時までここにいたが、その時両親が帰ってきた。',
+                source: '章末問題 2(7)',
+                choices: [],
+                answer: 'when',
+                explanation: 'then (その時: 副詞) を関係副詞の非限定用法 <b>when</b> に変換します（, when = and then）。'
+            },
+            {
+                id: 15,
+                cat: 'print',
+                type: 'choice',
+                prompt: '誤りを含む部分を訂正しなさい：<br>“I have watched the movie <u class="text-red-400">about he talked</u>.”',
+                sentence: 'I have watched the movie about ( ____ ) he talked.',
+                jp: '私は彼が話していた映画を見た。',
+                source: '章末問題 3(1)',
+                choices: ['which', 'that', 'whom', 'what'],
+                answer: 'which',
+                explanation: '前置詞 about の後ろで人を表さない先行詞 the movie を受ける関係代名詞は <b>which</b> です。（前置詞 + he は不可）'
+            },
+            {
+                id: 16,
+                cat: 'print',
+                type: 'choice',
+                prompt: '誤りを含む部分を訂正しなさい：<br>“Do you understand <u class="text-red-400">that I mean</u>?”',
+                sentence: 'Do you understand ( ____ ) I mean?',
+                jp: '私が言おうとしている意味が分かりますか？',
+                source: '章末問題 3(2)',
+                choices: ['what', 'that', 'which', 'how'],
+                answer: 'what',
+                explanation: '「私の言おうとしていること（もの）」先行詞を含み「the thing which/that」を意味する関係代名詞 <b>what</b> が必要です。'
+            },
+            {
+                id: 17,
+                cat: 'print',
+                type: 'choice',
+                prompt: '誤りを含む部分を訂正しなさい：<br>“I will never forget the day <u class="text-red-400">which we got married</u>.”',
+                sentence: 'I will never forget the day ( ____ ) we got married.',
+                jp: '私は私たちが結婚した日を一生忘れない。',
+                source: '章末問題 3(3)',
+                choices: ['when', 'which', 'where', 'what'],
+                answer: 'when',
+                explanation: '先行詞 the day で、節内「we got married (on the day)」と完全文になるため、関係代名詞 which ではなく関係副詞 <b>when</b> (または on which) を用います。'
+            },
+            {
+                id: 18,
+                cat: 'print',
+                type: 'fill',
+                prompt: 'ほぼ同じ意味になるように空欄に入る語を答えなさい。<br><span class="text-xs text-blue-400">This is the way how we got to know each other.</span>',
+                sentence: 'This is ( ____ ) we got to know each other.',
+                jp: 'このようにして私たちは知り合った。',
+                source: 'Ultimate p314 / 章末4(4)',
+                choices: [],
+                answer: 'how',
+                explanation: '「the way how」は現代英語では併用できません (❌ standard English)。<b>how</b> のみ、または <b>the way</b> のみを使用します。'
+            },
+            {
+                id: 19,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「彼の言葉が口論を引き起こした。」</span>',
+                sentence: '( caused / he / a quarrel / what / said ).',
+                jp: '彼の言葉が口論を引き起こした。',
+                source: '章末問題 4(2)',
+                choices: ['What', 'he', 'said', 'caused', 'a', 'quarrel'],
+                answer: 'What he said caused a quarrel',
+                explanation: '「What he said」が文全体の主語（S）となり、「彼が言ったこと」という意味を表します。'
+            },
+            {
+                id: 20,
+                cat: 'print',
+                type: 'fill',
+                prompt: 'ほぼ同じ意味になるように空欄に入る適語を答えなさい。<br><span class="text-xs text-blue-400">She said she had been sick in bed, but it was a lie.</span>',
+                sentence: 'She said she had been sick in bed, ( ____ ) was a lie.',
+                jp: '彼女は病気で寝ていたと言ったが、それは嘘だった。',
+                source: 'Ultimate p306 / 章末4(4)',
+                choices: [],
+                answer: 'which',
+                explanation: '非限定用法の <b>which</b> は、前の文全体（She said she had been sick in bed）を先行詞として受けることができます（, which = but it）。'
+            },
+            {
+                id: 21,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る適切な語を答えなさい。',
+                sentence: 'This isn\'t ( ____ ) I want.',
+                jp: 'これは私が欲しいものではありません。',
+                source: 'Ultimate p306 / 章末5(1)',
+                choices: [],
+                answer: 'what',
+                explanation: '「〜なもの」＝ the thing which を意味する <b>what</b> が適切です。'
+            },
+            {
+                id: 22,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る適切な語を答えなさい。',
+                sentence: 'I cleaned the kitchen, ( ____ ) made my mother happy.',
+                jp: '私は台所を掃除したが、そのことが母を喜ばせた。',
+                source: 'Ultimate p306 / 章末5(2)',
+                choices: [],
+                answer: 'which',
+                explanation: '「台所を掃除したこと」文全体を先行詞とする非限定用法の <b>which</b> です。'
+            },
+            {
+                id: 23,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る適切な関係副詞を答えなさい。',
+                sentence: 'The day will come ( ____ ) all my efforts are paid.',
+                jp: '私の努力がすべて報われる日が来るだろう。',
+                source: 'Ultimate p312 / 章末5(3)',
+                choices: [],
+                answer: 'when',
+                explanation: '先行詞 The day と関係副詞節 (when all my efforts are paid) が主語を短くするために離れています（離脱・離れて置く形）。'
+            },
+            {
+                id: 24,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る適切な関係副詞を答えなさい。',
+                sentence: 'He told a lie to me. That\'s ( ____ ) I hate him.',
+                jp: '彼は私に嘘をついた。そういうわけで私は彼が嫌いだ。',
+                source: 'Ultimate p313 / 章末5(4)',
+                choices: [],
+                answer: 'why',
+                explanation: '「That is why S V」で「そういうわけで〜だ（結果）」を表します。'
+            },
+            {
+                id: 25,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る複合関係代名詞を答えなさい。',
+                sentence: 'You may buy ( ____ ) you want at that store.',
+                jp: 'あの店ではあなたが欲しいものは何でも買っていいですよ。',
+                source: 'Ultimate p316 / 章末6(1)',
+                choices: [],
+                answer: 'whatever',
+                explanation: '「〜するものは何でも」は名詞節を導く複合関係代名詞 <b>whatever</b> （= anything that）です。'
+            },
+            {
+                id: 26,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る複合関係代名詞を答えなさい。',
+                sentence: 'The college takes ( ____ ) wants to study.',
+                jp: 'その大学は勉強したい人は誰でも受け入れます。',
+                source: 'Ultimate p316 / 章末6(2)',
+                choices: [],
+                answer: 'whoever',
+                explanation: '「〜する人は誰でも」は名詞節を導く複合関係代名詞 <b>whoever</b> （= anyone who）です。主格の役割を果たします。'
+            },
+            {
+                id: 27,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る複合関係副詞を答えなさい。',
+                sentence: 'Please ask me ( ____ ) you have a question.',
+                jp: '質問があるときはいつでも私に聞いてください。',
+                source: 'Ultimate p318 / 章末6(3)',
+                choices: [],
+                answer: 'whenever',
+                explanation: '「〜するときはいつでも」は時を表す複合関係副詞 <b>whenever</b> （= at any time when）です。'
+            },
+            {
+                id: 28,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る複合関係副詞を答えなさい。',
+                sentence: 'You can go ( ____ ) you want to.',
+                jp: 'あなたは行きたいところならどこへでも行くことができる。',
+                source: 'Ultimate p318 / 章末6(4)',
+                choices: [],
+                answer: 'wherever',
+                explanation: '「〜するところならどこへでも」は場所を表す複合関係副詞 <b>wherever</b> （= at any place where）です。'
+            },
+            {
+                id: 29,
+                cat: 'print',
+                type: 'fill',
+                prompt: '空欄に入る最も適切な語を答えなさい。',
+                sentence: 'He is the man ( ____ ) I think is a good singer.',
+                jp: '彼は私がいい歌手だと思う男性です。',
+                source: 'Ultimate p320 / 章末6(5)',
+                choices: [],
+                answer: 'who',
+                explanation: '「I think」が関係代名詞節内に挿入されています。(I think) を取り除くと「____ is a good singer」となるため、主格の <b>who</b> を選びます（whomと間違えやすい超頻出型）。'
+            },
+            {
+                id: 30,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「何が起きようとも、私はあなたと一緒にいます。」</span>',
+                sentence: '( I\'ll / with / be / happens / whatever / , ) you.',
+                jp: '何が起きようとも、私はあなたと一緒にいます。',
+                source: 'Ultimate p317 / 章末7(1)',
+                choices: ['Whatever', 'happens', ',', 'I\'ll', 'be', 'with'],
+                answer: 'Whatever happens , I\'ll be with',
+                explanation: '譲歩を表す副詞節「Whatever happens（何が起ころうとも＝No matter what happens）」＋「I\'ll be with you」の順になります。'
+            },
+            {
+                id: 31,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「私がどこへ行こうとも、そのイヌはついてくる。」</span>',
+                sentence: '( go / where / matter / no / I ), the dog follows me.',
+                jp: '私がどこへ行こうとも、そのイヌはついてくる。',
+                source: 'Ultimate p317 / 章末7(2)',
+                choices: ['No', 'matter', 'where', 'I', 'go'],
+                answer: 'No matter where I go',
+                explanation: '「No matter where SV」＝「wherever SV（どこへ〜しようとも）」という譲歩の構文です。'
+            },
+            {
+                id: 32,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「姉は少ないながらも持っているCDをすべて売った。」</span>',
+                sentence: 'My sister ( what / sold / CDs / had / few / she ).',
+                jp: '姉は少ないながらも持っているCDをすべて売った。',
+                source: 'Ultimate p320 / 章末7(3)',
+                choices: ['sold', 'what', 'few', 'CDs', 'she', 'had'],
+                answer: 'sold what few CDs she had',
+                explanation: '「what few + 複数量詞名詞」で「少ないながらもすべての〜」という関係形容詞の慣用表現です。'
+            },
+            {
+                id: 33,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「私はあなたと同じコンピューターを持っている。」</span>',
+                sentence: 'I have ( computer / as / the same / you / do ).',
+                jp: '私はあなたと同じコンピューターを持っている。',
+                source: 'Ultimate p323 / 章末7(4)',
+                choices: ['the', 'same', 'computer', 'as', 'you', 'do'],
+                answer: 'the same computer as you do',
+                explanation: '「the same A as B」で「Bと同じようなA（同種）」を表す疑似関係代名詞 as の構文です。'
+            },
+            {
+                id: 34,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「彼はいわゆる『歩く辞書』だ。」</span>',
+                sentence: 'He is ( dictionary / walking / is / a / what / called ).',
+                jp: '彼はいわゆる『歩く辞書』だ。',
+                source: 'Ultimate p323 Try It Out',
+                choices: ['what', 'is', 'called', 'a', 'walking', 'dictionary'],
+                answer: 'what is called a walking dictionary',
+                explanation: '「what is called 〜」で「いわゆる〜」という関係代名詞慣用表現です。'
+            },
+            {
+                id: 35,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「外国語を学ぶことは予想以上の忍耐がいる。」</span>',
+                sentence: 'Learning a foreign language ( expected / takes / patience / than / might / more / be ).',
+                jp: '外国語を学ぶことは予想以上の忍耐がいる。',
+                source: 'Ultimate p323 Try It Out',
+                choices: ['takes', 'more', 'patience', 'than', 'might', 'be', 'expected'],
+                answer: 'takes more patience than might be expected',
+                explanation: '比較級 + 疑似関係代名詞 <b>than</b> の構文。「than might be expected（予想される以上に）」'
+            },
+            {
+                id: 36,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る適切な語を選びなさい。',
+                sentence: 'As is ( ____ ) the case with him, he didn\'t show up on time.',
+                jp: '彼にはよくあることだが、時間通りに現れなかった。',
+                source: 'Ultimate p323 慣用表現8',
+                choices: ['often', 'usual', 'never', 'always'],
+                answer: 'often',
+                explanation: '「As is often the case with 人」で「人にはよくあることだが」という関係代名詞 as の慣用表現です。（As is usual with〜 も可）'
+            },
+            {
+                id: 37,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る適切な語を選びなさい。',
+                sentence: 'He is not what he ( ____ ) to be.',
+                jp: '彼は以前の彼とは違う（昔の彼ではない）。',
+                source: '教科書 p337 構文2',
+                choices: ['used', 'wants', 'likes', 'seems'],
+                answer: 'used',
+                explanation: '「what S used to be」で「以前のS / 昔のSの姿」を表す慣用表現です。（現在の姿は「what S is」）'
+            },
+            {
+                id: 38,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る適切な組み合わせを選びなさい。',
+                sentence: '( ____ ) with a lack of exercise and overeating, my father is overweight.',
+                jp: '運動不足やら食べ過ぎやらで、父は体重オーバーだ。',
+                source: '教科書 p339 構文4',
+                choices: ['What with', 'As with', 'Which with', 'That with'],
+                answer: 'What with',
+                explanation: '「What with A and B」で「AやらBやらで（理由の列挙）」を表す表現です。'
+            },
+            {
+                id: 39,
+                cat: 'print',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「友情と心との関係は、食物と体との関係と同じである。」</span>',
+                sentence: 'Friendship ( food / soul / is / is / to / the / what / to / the body ).',
+                jp: '友情と心との関係は、食物と体との関係と同じである。',
+                source: '教科書 p340 構文5',
+                choices: ['is', 'to', 'the', 'soul', 'what', 'food', 'is', 'to', 'the body'],
+                answer: 'is to the soul what food is to the body',
+                explanation: '「A is to B what C is to D」で「AのBに対する関係はCのDに対する関係と同じである」という重要構文です。'
+            },
+            {
+                id: 40,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る適切な語を選びなさい。',
+                sentence: 'Read such books ( ____ ) will make you happy.',
+                jp: 'あなたを幸せにするような本を読みなさい。',
+                source: '教科書 p341 構文6',
+                choices: ['as', 'which', 'that', 'than'],
+                answer: 'as',
+                explanation: '先行詞に such がついているため、対応する疑似関係代名詞 <b>as</b> を使用します（such A as ...）。'
+            },
+            {
+                id: 41,
+                cat: 'print',
+                type: 'choice',
+                prompt: '空欄に入る適切な語を選びなさい。',
+                sentence: 'There is no rule ( ____ ) has exceptions.',
+                jp: '例外のない規則はない。',
+                source: '教科書 p346 構文11',
+                choices: ['but', 'that', 'which', 'as'],
+                answer: 'but',
+                explanation: '否定の先行詞（no rule）を受けて「〜ないものはない」という意味を作る否定の意味を含んだ疑似関係代名詞 <b>but</b> （= that ... not）です。'
+            },
+
+            // --- SECTION 2: Extensive New Practice Questions (新規・応用・発散演習) ---
+            {
+                id: 42,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'However humble it may be, there is no place ( ____ ) home.',
+                jp: 'どんなに粗末であっても、我が家に勝る場所はない。',
+                source: '新規応用：疑似関係代名詞 like/like as',
+                choices: ['like', 'as', 'than', 'where'],
+                answer: 'like',
+                explanation: '「there is no place like home」で「我が家に優る場所はない」という有名な諺表現です。'
+            },
+            {
+                id: 43,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'He introduced a woman ( ____ ) he said was a distinguished pianist.',
+                jp: '彼は著名なピアニストだと彼が言っていた女性を紹介してくれた。',
+                source: '新規応用：連鎖関係代名詞（挿入節）',
+                choices: ['who', 'whom', 'whose', 'which'],
+                answer: 'who',
+                explanation: '「he said」が節内に挿入されています。取り除くと「____ was a distinguished pianist」となり、主語が必要なため主格の <b>who</b> が正解です。'
+            },
+            {
+                id: 44,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な組み合わせを選びなさい。',
+                sentence: 'She had three sons, all of ( ____ ) became doctors.',
+                jp: '彼女には3人の息子がいたが、全員が医師になった。',
+                source: '新規応用：代名詞+of+関係代名詞',
+                choices: ['whom', 'them', 'who', 'which'],
+                answer: 'whom',
+                explanation: '前置詞 of の目的語として人を指すため <b>whom</b> になります（all of them だと節を繋ぐ接続詞がないため不可）。'
+            },
+            {
+                id: 45,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'I bought two cameras, ( ____ ) of which worked properly.',
+                jp: '私はカメラを2台買ったが、どちらも正常に動かなかった。',
+                source: '新規応用：neither of which',
+                choices: ['neither', 'none', 'both', 'all'],
+                answer: 'neither',
+                explanation: '2つのものを否定する場合は <b>neither of which</b> を用います（3つ以上の場合は none of which）。'
+            },
+            {
+                id: 46,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'The house ( ____ ) roof was damaged in the storm has been repaired.',
+                jp: '嵐で屋根が破損した家は修理された。',
+                source: '新規応用：無生物の所有格 whose',
+                choices: ['whose', 'which', 'that', 'of which'],
+                answer: 'whose',
+                explanation: '無生物（the house）であっても所有関係を表す場合は <b>whose</b> roof（または the roof of which）を使用します。'
+            },
+            {
+                id: 47,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な複合関係詞を選びなさい。',
+                sentence: '( ____ ) hard you try, you cannot master a foreign language in a week.',
+                jp: 'どんなに一生懸命努力しても、1週間で外国語をマスターすることはできない。',
+                source: '新規応用：However + 形容詞/副詞',
+                choices: ['However', 'Whatever', 'Whenever', 'Wherever'],
+                answer: 'However',
+                explanation: '「<b>However + 形容詞/副詞 + S + V</b>」で「どんなに〜しようとも（= No matter how + 形/副）」という譲歩を表します。'
+            },
+            {
+                id: 48,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'He expressed his opinion, ( ____ ) I found very convincing.',
+                jp: '彼は意見を述べたが、私はそれをとても説得力があると思った。',
+                source: '新規応用：非限定用法 which',
+                choices: ['which', 'that', 'what', 'it'],
+                answer: 'which',
+                explanation: 'カンマ付きの継続用法（非限定用法）で前の発言内容（his opinion）を受けるため <b>which</b> が入ります。'
+            },
+            {
+                id: 49,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'This is the very book ( ____ ) I have been looking for.',
+                jp: 'これこそまさに私が探し続けていた本です。',
+                source: '新規応用：the very + that 限定用法',
+                choices: ['that', 'which', 'what', 'where'],
+                answer: 'that',
+                explanation: '先行詞に「the very（まさにその）」という強い限定語句がつくため、関係代名詞は <b>that</b> が優先されます。'
+            },
+            {
+                id: 50,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'He gave me ( ____ ) money he had in his wallet.',
+                jp: '彼は財布にあったわずかな金をすべて私にくれた。',
+                source: '新規応用：what little + 不可算名詞',
+                choices: ['what little', 'what few', 'whatever', 'that little'],
+                answer: 'what little',
+                explanation: 'お金（money）は不可算名詞なので「what little + 名詞」で「少ないながらもすべての〜」を表します。'
+            },
+            {
+                id: 51,
+                cat: 'new',
+                type: 'fill',
+                prompt: '空欄に入る最も適切な関係詞を答えなさい。',
+                sentence: 'I will lend you such tools ( ____ ) are needed for the repair.',
+                jp: '修理に必要な工具をお貸ししましょう。',
+                source: '新規応用：such ... as',
+                choices: [],
+                answer: 'as',
+                explanation: 'such ... <b>as</b> で「〜するような…」という疑似関係代名詞です。'
+            },
+            {
+                id: 52,
+                cat: 'new',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「彼は以前の彼とは違う。」</span>',
+                sentence: 'He is not ( used / he / what / to / be ).',
+                jp: '彼は以前の彼とは違う。',
+                source: '新規応用：what S used to be',
+                choices: ['what', 'he', 'used', 'to', 'be'],
+                answer: 'what he used to be',
+                explanation: '「what S used to be」で「かつてのSの姿・状態」を表します。'
+            },
+            {
+                id: 53,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な関係詞を選びなさい。',
+                sentence: 'The hotel ( ____ ) we stayed at during our trip was fantastic.',
+                jp: '私たちが旅行中に泊まったホテルは素晴らしかった。',
+                source: '新規応用：前置詞の位置（at）と関係代名詞',
+                choices: ['which', 'where', 'when', 'what'],
+                answer: 'which',
+                explanation: '末尾に前置詞 <b>at</b> があるため、関係副詞 where ではなく関係代名詞 <b>which</b> (または that) を用います。（stayed at standard hotel）'
+            },
+            {
+                id: 54,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'He didn\'t say a word, ( ____ ) made her even angrier.',
+                jp: '彼は一言もしゃべらなかったが、そのことが彼女をさらに怒らせた。',
+                source: '新規応用：節全体を受ける which',
+                choices: ['which', 'that', 'what', 'this'],
+                answer: 'which',
+                explanation: '「一言もしゃべらなかったこと」全体を先行詞として受ける非限定用法の <b>which</b> です。'
+            },
+            {
+                id: 55,
+                cat: 'new',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「あなたがどちらを選ぼうとも、私は応援します。」</span>',
+                sentence: '( support / choose / whichever / I\'ll / you / , ) you.',
+                jp: 'あなたがどちらを選ぼうとも、私は応援します。',
+                source: '新規応用：複合関係代名詞 譲歩',
+                choices: ['Whichever', 'you', 'choose', ',', 'I\'ll', 'support'],
+                answer: 'Whichever you choose , I\'ll support',
+                explanation: '「Whichever you choose（どちらを選ぼうとも）」という譲歩の副詞節を構成します。'
+            },
+            {
+                id: 56,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'The reason ( ____ ) he failed the exam was lack of preparation.',
+                jp: '彼が試験に落ちた理由は準備不足であった。',
+                source: '新規応用：the reason why / that',
+                choices: ['why', 'which', 'where', 'what'],
+                answer: 'why',
+                explanation: '先行詞 the reason を受けて理由を表す関係副詞 <b>why</b> です。'
+            },
+            {
+                id: 57,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な語を選びなさい。',
+                sentence: 'She is the only scientist ( ____ ) I know who has won the Nobel Prize twice.',
+                jp: '彼女は私が知っている中でノーベル賞を2回受賞した唯一の科学者だ。',
+                source: '新規応用：二重限定（二重関係詞）',
+                choices: ['that', 'whom', 'which', 'what'],
+                answer: 'that',
+                explanation: '1つの先行詞（the only scientist）に2つの関係詞節が並ぶ「二重限定」の形です。the only があるため <b>that</b> を優先します。'
+            },
+            {
+                id: 58,
+                cat: 'new',
+                type: 'choice',
+                prompt: '空欄に入る最も適切な組み合わせを選びなさい。',
+                sentence: 'He has two daughters, ( ____ ) of whom is married.',
+                jp: '彼には2人の娘がいるが、どちらも結婚していない。',
+                source: '新規応用：プリント p323 参考',
+                choices: ['neither', 'both', 'none', 'all'],
+                answer: 'neither',
+                explanation: '「2人のうちどちらも〜ない」は <b>neither of whom</b> です。'
+            },
+            {
+                id: 59,
+                cat: 'new',
+                type: 'fill',
+                prompt: '空欄に入る適切な語を答えなさい。',
+                sentence: 'He has more books ( ____ ) can be placed on these shelves.',
+                jp: '彼にはこれらの棚に置くことができる以上の本がある。',
+                source: '新規応用：比較級 + than (疑似関係代名詞)',
+                choices: [],
+                answer: 'than',
+                explanation: 'more books に続いて主格の働きをする疑似関係代名詞 <b>than</b> が入ります。'
+            },
+            {
+                id: 60,
+                cat: 'new',
+                type: 'reorder',
+                prompt: '日本文に合うように語句を並べ替えなさい。<br><span class="font-bold text-amber-300">「彼は私たちが思っていた以上の金を使わなかった。」</span>',
+                sentence: 'He didn\'t spend ( money / than / we / more / expected ).',
+                jp: '彼は私たちが思っていた以上の金を使わなかった。',
+                source: '新規応用：more ... than S V',
+                choices: ['more', 'money', 'than', 'we', 'expected'],
+                answer: 'more money than we expected',
+                explanation: '「more money than we expected（私たちが予想した以上のお金）」の並びになります。'
+            }
+        ];
+
+        // -------------------------------------------------------------
+        // APP STATE & CONTROLLER LOGIC
+        // -------------------------------------------------------------
+        let currentPool = [];
+        let currentIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let missedQuestions = [];
+        let currentFilter = 'all';
+        let reorderSelection = [];
+        let answeredCurrent = false;
+
+        // Initialize state on load
+        window.onload = function() {
+            initApp();
+        };
+
+        function initApp() {
+            // Load stats from localStorage if available
+            loadStats();
+            filterQuestions(currentFilter);
+        }
+
+        function filterQuestions(mode) {
+            currentFilter = mode;
+            if (mode === 'all') {
+                currentPool = [...questionBank];
+            } else if (mode === 'print') {
+                currentPool = questionBank.filter(q => q.cat === 'print');
+            } else if (mode === 'new') {
+                currentPool = questionBank.filter(q => q.cat === 'new');
+            } else if (mode === 'review') {
+                currentPool = [...missedQuestions];
+            }
+
+            // Shuffle pool
+            shuffleArray(currentPool);
+
+            currentIndex = 0;
+            score = 0;
+            streak = 0;
+            
+            updateReviewOptionBadge();
+            
+            if (currentPool.length === 0) {
+                alert('該当する問題がありません。');
+                return;
+            }
+
+            document.getElementById('summaryCard').classList.add('hidden');
+            document.getElementById('quizContainer').classList.remove('hidden');
+            
+            renderQuestion();
+        }
+
+        function changeFilterMode() {
+            const val = document.getElementById('modeFilter').value;
+            filterQuestions(val);
+        }
+
+        function renderQuestion() {
+            if (currentIndex >= currentPool.length) {
+                showSummary();
+                return;
+            }
+
+            answeredCurrent = false;
+            const q = currentPool[currentIndex];
+
+            // Header UI updates
+            document.getElementById('currIdx').textContent = currentIndex + 1;
+            document.getElementById('totalCount').textContent = currentPool.length;
+            
+            const progressPct = ((currentIndex) / currentPool.length) * 100;
+            document.getElementById('progressBar').style.width = `${progressPct}%`;
+
+            document.getElementById('questionSource').textContent = q.source || '文法演習';
+            document.getElementById('badgeCategory').textContent = q.cat === 'print' ? 'プリント・章末' : '新規応用';
+            
+            let typeLabel = '4択問題';
+            if (q.type === 'fill') typeLabel = '空欄記述';
+            if (q.type === 'reorder') typeLabel = '語句並べ替え';
+            document.getElementById('badgeType').textContent = typeLabel;
+
+            // Prompt & Sentence
+            document.getElementById('questionPrompt').innerHTML = q.prompt;
+            document.getElementById('questionJapanese').textContent = q.jp;
+            document.getElementById('questionSentence').innerHTML = formatSentence(q.sentence);
+
+            // Clear Explanation Area
+            document.getElementById('explanationContainer').classList.add('hidden');
+            document.getElementById('actionArea').classList.add('hidden');
+
+            // Render Input Controls according to type
+            const container = document.getElementById('interactiveArea');
+            container.innerHTML = '';
+
+            if (q.type === 'choice') {
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+                
+                q.choices.forEach((choice, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn w-full p-4 rounded-xl text-left font-bold text-base bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500 text-slate-100 transition-all flex items-center justify-between group shadow-sm';
+                    btn.onclick = () => selectChoice(choice, btn);
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 group-hover:border-blue-400 group-hover:bg-blue-600/20 text-xs flex items-center justify-center font-bold text-slate-300 group-hover:text-blue-400">
+                                ${String.fromCharCode(65 + idx)}
+                            </span>
+                            <span>${choice}</span>
+                        </div>
+                        <i class="fa-regular fa-circle text-slate-600 group-hover:text-blue-400"></i>
+                    `;
+                    grid.appendChild(btn);
+                });
+                container.appendChild(grid);
+
+            } else if (q.type === 'fill') {
+                const wrap = document.createElement('div');
+                wrap.className = 'flex flex-col gap-3';
+                wrap.innerHTML = `
+                    <div class="relative">
+                        <input type="text" id="fillInput" autocomplete="off" spellcheck="false" placeholder="英単語を入力してください (例: who, which...)" 
+                            class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3.5 text-lg font-semibold text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all">
+                    </div>
+                `;
+                container.appendChild(wrap);
+                document.getElementById('actionArea').classList.remove('hidden');
+
+                // Enter key support
+                setTimeout(() => {
+                    const inp = document.getElementById('fillInput');
+                    if (inp) {
+                        inp.focus();
+                        inp.onkeypress = (e) => {
+                            if (e.key === 'Enter') checkAnswer();
+                        };
+                    }
+                }, 100);
+
+            } else if (q.type === 'reorder') {
+                reorderSelection = [];
+                const wrap = document.createElement('div');
+                wrap.className = 'flex flex-col gap-4';
+
+                // Display Selected Chips Area
+                const selectedBox = document.createElement('div');
+                selectedBox.id = 'selectedBox';
+                selectedBox.className = 'min-h-[58px] p-3 rounded-2xl bg-slate-950/90 border-2 border-blue-500/40 flex flex-wrap gap-2 items-center shadow-inner';
+                selectedBox.innerHTML = '<span id="reorderPlaceholder" class="text-xs text-slate-500 italic px-2">下の単語チップをタップして順に並べ替えてください</span>';
+
+                // Available Chips Pool
+                const poolBox = document.createElement('div');
+                poolBox.id = 'poolBox';
+                poolBox.className = 'flex flex-wrap gap-2 p-3 rounded-2xl bg-slate-900/60 border border-slate-800';
+
+                // Shuffle choice chips for reorder
+                const shuffledChoices = [...q.choices];
+                shuffleArray(shuffledChoices);
+
+                shuffledChoices.forEach((word, wIdx) => {
+                    const chip = document.createElement('button');
+                    chip.className = 'word-chip px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-semibold text-slate-100 transition-all shadow-md active:scale-95';
+                    chip.dataset.word = word;
+                    chip.dataset.id = `chip-${wIdx}`;
+                    chip.textContent = word;
+                    chip.onclick = () => tapWordChip(word, chip);
+                    poolBox.appendChild(chip);
+                });
+
+                wrap.appendChild(selectedBox);
+                wrap.appendChild(poolBox);
+                container.appendChild(wrap);
+                document.getElementById('actionArea').classList.remove('hidden');
+            }
+        }
+
+        function formatSentence(str) {
+            return str.replace(/\( ____ \)/g, '<span class="inline-block border-b-2 border-blue-400 px-3 py-0.5 text-blue-300 font-mono font-bold">( &nbsp;&nbsp;&nbsp;&nbsp; )</span>');
+        }
+
+        // Choice Selection Handler
+        function selectChoice(userChoice, btnElem) {
+            if (answeredCurrent) return;
+            playSound('click');
+
+            // Highlight chosen button
+            document.querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('border-blue-500', 'bg-blue-600/20');
+                b.disabled = true;
+            });
+
+            evaluateResult(userChoice, btnElem);
+        }
+
+        // Chip tap for reorder
+        function tapWordChip(word, chipElem) {
+            if (answeredCurrent) return;
+            playSound('click');
+
+            const selectedBox = document.getElementById('selectedBox');
+            const poolBox = document.getElementById('poolBox');
+            const placeholder = document.getElementById('reorderPlaceholder');
+
+            if (placeholder) placeholder.remove();
+
+            if (chipElem.parentElement === poolBox) {
+                // Move from pool to selected
+                reorderSelection.push({ word: word, elem: chipElem });
+                selectedBox.appendChild(chipElem);
+                chipElem.classList.replace('bg-slate-800', 'bg-blue-600');
+                chipElem.classList.replace('border-slate-700', 'border-blue-400');
+            } else {
+                // Move back to pool
+                reorderSelection = reorderSelection.filter(item => item.elem !== chipElem);
+                poolBox.appendChild(chipElem);
+                chipElem.classList.replace('bg-blue-600', 'bg-slate-800');
+                chipElem.classList.replace('border-blue-400', 'border-slate-700');
+
+                if (reorderSelection.length === 0) {
+                    selectedBox.innerHTML = '<span id="reorderPlaceholder" class="text-xs text-slate-500 italic px-2">下の単語チップをタップして順に並べ替えてください</span>';
+                }
+            }
+        }
+
+        // Submit answer for Fill / Reorder
+        function checkAnswer() {
+            if (answeredCurrent) return;
+            const q = currentPool[currentIndex];
+            let userAns = '';
+
+            if (q.type === 'fill') {
+                const inp = document.getElementById('fillInput');
+                if (!inp) return;
+                userAns = inp.value.trim();
+                if (!userAns) return;
+            } else if (q.type === 'reorder') {
+                if (reorderSelection.length === 0) return;
+                userAns = reorderSelection.map(item => item.word).join(' ');
+            }
+
+            evaluateResult(userAns, null);
+        }
+
+        // Master Answer Evaluator
+        function evaluateResult(userAnswer, targetElem) {
+            answeredCurrent = true;
+            const q = currentPool[currentIndex];
+            
+            // Normalize for comparison
+            const normUser = normalizeStr(userAnswer);
+            const normTarget = normalizeStr(q.answer);
+
+            const isCorrect = (normUser === normTarget);
+
+            const feedback = document.getElementById('feedbackResult');
+            const explanation = document.getElementById('explanationContainer');
+            const expText = document.getElementById('explanationText');
+
+            if (isCorrect) {
+                score++;
+                streak++;
+                playSound('correct');
+
+                feedback.className = 'flex items-center gap-3 p-4 rounded-2xl mb-4 font-bold text-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-2xl"></i> 正解！ Excellent!`;
+
+                if (targetElem) {
+                    targetElem.classList.add('bg-emerald-600/30', 'border-emerald-500', 'text-emerald-300');
+                }
+            } else {
+                streak = 0;
+                playSound('incorrect');
+
+                // Track missed question
+                if (!missedQuestions.some(item => item.id === q.id)) {
+                    missedQuestions.push(q);
+                    updateReviewOptionBadge();
+                }
+
+                feedback.className = 'flex items-center gap-3 p-4 rounded-2xl mb-4 font-bold text-lg bg-rose-500/15 border border-rose-500/30 text-rose-400';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-2xl"></i> 不正解... <span class="text-sm font-normal text-slate-300 ml-2">模範解答: <strong class="text-emerald-400 font-mono text-base">${q.answer}</strong></span>`;
+
+                if (targetElem) {
+                    targetElem.classList.add('bg-rose-600/30', 'border-rose-500', 'text-rose-300');
+                }
+            }
+
+            // Update stats counters
+            updateStatsUI();
+
+            // Populate explanation
+            expText.innerHTML = `
+                <div class="mb-2"><span class="font-bold text-blue-300">【模範解答】</span> <code class="bg-slate-900 px-2 py-1 rounded text-emerald-400 font-mono font-bold">${q.answer}</code></div>
+                <div>${q.explanation}</div>
+            `;
+
+            explanation.classList.remove('hidden');
+            document.getElementById('actionArea').classList.add('hidden');
+
+            // Scroll down to explanation smoothly on mobile
+            setTimeout(() => {
+                explanation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function normalizeStr(str) {
+            return str.toLowerCase().replace(/['"’]/g, "'").replace(/\s+/g, ' ').replace(/[^a-z0-9'\s]/gi, '').trim();
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            currentIndex++;
+            renderQuestion();
+        }
+
+        function updateStatsUI() {
+            const accuracy = currentIndex > 0 ? Math.round((score / (currentIndex + 1)) * 100) : (score > 0 ? 100 : 0);
+            document.getElementById('accuracyRate').textContent = accuracy;
+            document.getElementById('streakCount').textContent = streak;
+
+            // Save to localStorage
+            localStorage.setItem('rel_quiz_score', score);
+            localStorage.setItem('rel_quiz_streak', streak);
+        }
+
+        function updateReviewOptionBadge() {
+            const opt = document.getElementById('reviewOption');
+            if (missedQuestions.length > 0) {
+                opt.disabled = false;
+                opt.textContent = `⚠️ ミスした問題のみ復習 (${missedQuestions.length})`;
+                document.getElementById('reviewMissedBtn').disabled = false;
+            } else {
+                opt.disabled = true;
+                opt.textContent = `⚠️ ミスした問題のみ復習 (0)`;
+                document.getElementById('reviewMissedBtn').disabled = true;
+            }
+        }
+
+        function showSummary() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('summaryCard').classList.remove('hidden');
+
+            const total = currentPool.length;
+            const accuracy = total > 0 ? Math.round((score / total) * 100) : 0;
+
+            document.getElementById('summaryTotal').textContent = total;
+            document.getElementById('summaryCorrect').textContent = score;
+            document.getElementById('summaryAccuracy').textContent = `${accuracy}%`;
+
+            document.getElementById('progressBar').style.width = '100%';
+        }
+
+        function startReviewMode() {
+            if (missedQuestions.length === 0) return;
+            document.getElementById('modeFilter').value = 'review';
+            filterQuestions('review');
+        }
+
+        function restartQuiz() {
+            filterQuestions(currentFilter);
+        }
+
+        function resetStats() {
+            if (confirm('学習記録とミス問題リストをリセットしますか？')) {
+                score = 0;
+                streak = 0;
+                missedQuestions = [];
+                localStorage.removeItem('rel_quiz_score');
+                localStorage.removeItem('rel_quiz_streak');
+                updateReviewOptionBadge();
+                filterQuestions('all');
+            }
+        }
+
+        function loadStats() {
+            const savedScore = localStorage.getItem('rel_quiz_score');
+            const savedStreak = localStorage.getItem('rel_quiz_streak');
+            if (savedScore !== null) score = parseInt(savedScore, 10);
+            if (savedStreak !== null) streak = parseInt(savedStreak, 10);
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+    </script>
+</body>
+</html>
